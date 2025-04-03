@@ -1,0 +1,31 @@
+;; Test user, role, and type attributes in constrain rule
+
+(class CLASS (PERM))
+(classorder (CLASS))
+(sid SID)
+(sidorder (SID))
+(user USER)
+(role ROLE)
+(type TYPE)
+(category CAT)
+(categoryorder (CAT))
+(sensitivity SENS)
+(sensitivityorder (SENS))
+(sensitivitycategory SENS (CAT))
+(allow TYPE self (CLASS (PERM)))
+(roletype ROLE TYPE)
+(userrole USER ROLE)
+(userlevel USER (SENS))
+(userrange USER ((SENS)(SENS (CAT))))
+(sidcontext SID (USER ROLE TYPE ((SENS)(SENS))))
+
+(userattribute ua)
+(userattributeset ua (USER))
+
+(roleattribute ra)
+(roleattributeset ra (ROLE))
+
+(typeattribute ta)
+(typeattributeset ta (TYPE))
+
+(constrain (CLASS (PERM)) (or (or (eq u1 ua) (eq r1 ra)) (eq t1 ta)))

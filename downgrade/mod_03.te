@@ -1,0 +1,20 @@
+module mod_03 0.0.1;
+
+require {
+	class CLASS01 { PERM01 };
+	class CLASS02 { PERM02 };
+	class CLASS03 { PERM03 };
+	class CLASS04 { PERM04 };
+	class CLASS05 { PERM05 };
+	class CLASS06 { PERM06 };
+}
+
+type ta;
+type tb;
+type tc;
+
+type_transition ta tb : CLASS01 tc "file01";
+type_transition ta tb : CLASS02 tc "[file02]";
+type_transition ta tb : CLASS03 tc "file03";
+type_transition ta tb : CLASS04 tc "file04";
+type_transition ta tb : CLASS05 tc "file05";

@@ -1,0 +1,52 @@
+module mod_02 1.0;
+
+require {
+	class CLASS2 { CPERM2A CPERM2B };
+    #class COMMON2 { CPERM2A CPERM2B };
+	role ROLE2;
+	type TYPE2;
+	#attribute TATTR2;
+	attribute_role RATTR2;
+	#user USER2;
+	bool BOOL2;
+	#sensitivity SENS2;
+	#category CAT2;
+}
+
+#class CLASS_M2
+#class CLASS_M2 { PERM_M2 }
+
+bool BOOL3 false;
+type TYPE2A;
+type TYPE2B;
+type TYPE3;
+allow TYPE2 self : CLASS2 CPERM2A;
+if (BOOL2) {
+   allow TYPE2A self:CLASS2 CPERM2A;
+} else {
+  allow TYPE2A self:CLASS2 CPERM2B;
+}
+role ROLE2A;
+role ROLE2B;
+role ROLE3;
+role ROLE2 types TYPE2;
+role ROLE2A types TYPE2A;
+roleattribute ROLE2A RATTR2;
+roleattribute ROLE2B RATTR2;
+
+optional {
+		 require {
+		 		 type TYPE2B;
+		 		 role ROLE2;
+				 attribute_role RATTR2;
+				 }
+		allow TYPE2 self : CLASS2 CPERM2B;
+		role RATTR2 types TYPE2B;
+		if (not BOOL2) {
+		   allow TYPE2B self:CLASS2 CPERM2A;
+		} else {
+		  allow TYPE2B self:CLASS2 CPERM2B;
+		}
+}
+
+#allow TYPE2A self:CLASS_M2 PERM_M2;

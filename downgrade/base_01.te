@@ -1,0 +1,21 @@
+class CLASS1
+class CLASS01
+class CLASS02
+class CLASS03
+class CLASS04
+class CLASS05
+class CLASS06
+sid kernel
+class CLASS1 { PERM1 }
+class CLASS01 { PERM01 }
+class CLASS02 { PERM02 }
+class CLASS03 { PERM03 }
+class CLASS04 { PERM04 }
+class CLASS05 { PERM05 }
+class CLASS06 { PERM06 }
+type TYPE1;
+allow TYPE1 self : CLASS1 PERM1;
+role ROLE1;
+role ROLE1 types TYPE1;
+user USER1 roles ROLE1;
+sid kernel USER1:ROLE1:TYPE1

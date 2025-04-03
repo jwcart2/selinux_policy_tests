@@ -1,0 +1,41 @@
+;; Can use aliases, attributes, and lists in contraints
+
+(class CLASS (PERM))
+(classorder (CLASS))
+(sid SID)
+(sidorder (SID))
+(user USER)
+(role ROLE)
+(type TYPE)
+(category CAT)
+(categoryorder (CAT))
+(sensitivity SENS)
+(sensitivityorder (SENS))
+(sensitivitycategory SENS (CAT))
+(allow TYPE self (CLASS (PERM)))
+(roletype ROLE TYPE)
+(userrole USER ROLE)
+(userlevel USER (SENS))
+(userrange USER ((SENS)(SENS (CAT))))
+(sidcontext SID (USER ROLE TYPE ((SENS)(SENS))))
+
+(typeattribute a1)
+(type t1)
+(type t2)
+(type t3)
+(type t4)
+(typealias t2a)
+(typealiasactual t2a t2)
+(typeattributeset a1 (t1 t2))
+
+(constrain (CLASS (PERM)) (or (eq t1 a1) (eq u1 USER)))
+(constrain (CLASS (PERM)) (or (eq t1 t2a) (eq u1 USER)))
+
+;; Expression not allowed
+;;(constrain (CLASS (PERM)) (or (eq t1 (t1 or t2) (eq u1 USER)))
+
+;; Negation not allowed
+;;(constrain (CLASS (PERM)) (or (eq t1 (not t1)) (eq u1 USER)))
+
+;; all not allowed
+;;(constrain (CLASS (PERM)) (or (eq t1 (all)) (eq u1 USER)))

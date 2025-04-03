@@ -1,0 +1,37 @@
+;; classpermissionset IS allowed in a tunable
+
+(class CLASS (PERM))
+(classorder (CLASS))
+(sid SID)
+(sidorder (SID))
+(user USER)
+(role ROLE)
+(type TYPE)
+(category CAT)
+(categoryorder (CAT))
+(sensitivity SENS)
+(sensitivityorder (SENS))
+(sensitivitycategory SENS (CAT))
+(allow TYPE self (CLASS (PERM)))
+(roletype ROLE TYPE)
+(userrole USER ROLE)
+(userlevel USER (SENS))
+(userrange USER ((SENS)(SENS (CAT))))
+(sidcontext SID (USER ROLE TYPE ((SENS)(SENS))))
+
+
+(common COMMON (PERM1 PERM2 PERM3 PERM4))
+(classcommon CLASS COMMON)
+
+(tunable t1 true)
+
+(classpermission cp1)
+
+(classpermissionset cp1 (CLASS (PERM)))
+
+(tunableif t1
+  (true
+    (classpermissionset cp1 (CLASS (PERM1))))
+  (false
+    (classpermissionset cp1 (CLASS (PERM2))))
+)

@@ -1,0 +1,38 @@
+;; Can roletype statements use attributes, aliases, and sets?
+;; attributes and aliases, but not sets
+
+
+(class CLASS (PERM))
+(classorder (CLASS))
+(sid SID)
+(sidorder (SID))
+(user USER)
+(role ROLE)
+(type TYPE)
+(category CAT)
+(categoryorder (CAT))
+(sensitivity SENS)
+(sensitivityorder (SENS))
+(sensitivitycategory SENS (CAT))
+(allow TYPE self (CLASS (PERM)))
+(roletype ROLE TYPE)
+(userrole USER ROLE)
+(userlevel USER (SENS))
+(userrange USER ((SENS)(SENS (CAT))))
+(sidcontext SID (USER ROLE TYPE ((SENS)(SENS))))
+
+
+(typeattribute a1)
+(type t1)
+(type t2)
+(typealias t2a)
+(typealiasactual t2a t2)
+(typeattributeset a1 (t1))
+
+(role r1)
+
+(roletype r1 a1)
+(roletype r1 t2a)
+
+;; bad
+;;(roletype r1 (or t1 t2))

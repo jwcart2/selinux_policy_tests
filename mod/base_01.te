@@ -1,0 +1,117 @@
+# handle_unknown deny
+class CLASS1
+class CLASS2
+class CLASS3
+class CLASS4
+class CLASS5
+sid kernel
+sid security
+sid unlabeled
+common COMMON2 { CPERM2A CPERM2B }
+common COMMON3 { CPERM3A CPERM3B }
+class CLASS1 { PERM1A PERM1B PERM1C PERM1D PERM1E PERM1F }
+class CLASS2 inherits COMMON2
+class CLASS3 inherits COMMON3 { PERM3A PERM3B }
+class CLASS4 { ioctl }
+default_user { CLASS1 } source;
+default_user { CLASS2 } source;
+default_user { CLASS3 } source;
+default_role { CLASS1 } source;
+default_type { CLASS2 } target;
+default_range { CLASS3 } target low-high;
+sensitivity SENS1 alias SYSLOW;
+sensitivity SENS2;
+sensitivity SENS3 alias { MAXSENS SYSHIGH };
+dominance { SENS1 SENS2 SENS3 }
+category CAT1 alias ACAT1A;
+category CAT2 alias { ACAT2A ACAT2B };
+category CAT3;
+level SENS1;
+level SENS2:CAT1,CAT3;
+level SENS3:CAT1.CAT3;
+mlsconstrain CLASS1 { PERM1A } ((h1 dom h2) and (l1 domby h1));
+mlsvalidatetrans CLASS2 ((l1 eq l2) or (l1 incomp l2));
+mlsvalidatetrans CLASS3 ((l1 eq l2) or (t3 eq TYPE1));
+policycap network_peer_controls;
+policycap open_perms;
+attribute TATTR1;
+attribute TATTR2;
+attribute_role RATTR1;
+attribute_role RATTR2;
+bool BOOL1 false;
+bool BOOL2 true;
+type TYPE1;
+type TYPE1A;
+type TYPE1B;
+type TYPE1C;
+type TYPE1D;
+type TYPE1E;
+TYPE TYPE1F;
+type TYPE1X;
+type TYPE1Z;
+type TYPE2;
+typealias TYPE1A alias { ATYPE1A ATYPE1AA };
+typealias TYPE1B alias ATYPE1B;
+typebounds TYPE1C TYPE1D;
+typeattribute TYPE1A TATTR1;
+typeattribute TYPE1B TATTR1;
+permissive TYPE1A;
+allow TYPE1 self:CLASS1 { PERM1A };
+allow TYPE1A TYPE1A:CLASS1 { PERM1B };
+allow TYPE1A ATYPE1A:CLASS1 PERM1C;
+allow TYPE1A TATTR1:CLASS1 PERM1D;
+allow TYPE1A TYPE1Z:CLASS1 PERM1A;
+allow TATTR1 TYPE1Z:CLASS1 PERM1B;
+allow TYPE1C TYPE1Z:CLASS1 { PERM1C PERM1D };
+allow TYPE1D TYPE1Z:CLASS1 PERM1C;
+allow TYPE1E TYPE1X:CLASS4 ioctl;
+auditallow TYPE1A TYPE1Z:CLASS1 PERM1D;
+dontaudit TYPE1A TYPE1Z:CLASS1 PERM1E;
+neverallow TYPE1A TYPE1Z:CLASS1 PERM1F;
+allowxperm TYPE1E TYPE1X:CLASS4 ioctl 0x1234;
+auditallowxperm TYPE1E TYPE1X:CLASS4 ioctl 0x9911;
+dontauditxperm TYPE1E TYPE1X:CLASS4 ioctl 0x9922;
+neverallowxperm TYPE1E TYPE1X:CLASS4 ioctl 0x9933;
+type_transition TYPE1A TYPE1Z:CLASS1 TYPE1B;
+type_member TYPE1A TYPE1Z:CLASS1 TYPE1C;
+type_change TYPE1A TYPE1Z:CLASS1 TYPE1D;
+type_transition TYPE1A TYPE1Z:CLASS4 TYPE1E "file01";
+range_transition TYPE1A TYPE1Z:CLASS1 SENS2;  
+range_transition TYPE1A TYPE1Z:CLASS2 SENS2 - SENS3:CAT1,ACAT2A;
+if (BOOL1) {
+   allow TYPE1F self:CLASS1 PERM1A;
+} else {
+  allow TYPE1F self:CLASS1 PERM1B;
+}
+role ROLE1;
+role ROLE1A;
+role ROLE1B;
+role ROLE2;
+role ROLE1 types { TYPE1 TYPE1A TYPE1B };
+role ROLE1A types { TYPE1A TYPE1C};
+role ROLE1B types { TYPE1B };
+role RATTR1 types { TYPE1D };
+roleattribute ROLE1A RATTR1;
+roleattribute ROLE1B RATTR1;
+allow ROLE1A ROLE1B;
+role_transition ROLE1A TYPE1Z:CLASS1 ROLE1B;
+user USER1 roles { ROLE1 ROLE1A ROLE1B } level SENS1 range SENS1 - SENS3:CAT1.CAT3;
+constrain CLASS1 { PERM1B } not ((t1 == TYPE1) and (u1 != u2));
+validatetrans CLASS4 ((u1 == u2) or (r1 == r2));
+validatetrans CLASS5 ((u1 == u2) or (t3 == TYPE1));
+sid kernel USER1:ROLE1:TYPE1:SYSLOW - SYSHIGH:CAT1,ACAT2B,CAT3
+sid security USER1:ROLE1:TYPE1:SENS1 - SENS2
+sid unlabeled USER1:ROLE1:TYPE1:SENS2:CAT1,CAT3 - MAXSENS:CAT1,CAT3
+fs_use_xattr fs01 USER1:ROLE1:TYPE1:SENS1;
+fs_use_task fs02 USER1:ROLE1:TYPE1:SENS1;
+fs_use_trans fs03 USER1:ROLE1:TYPE1:SENS1;
+genfscon fs04 "/" USER1:ROLE1:TYPE1:SENS1
+portcon udp 1000 USER1:ROLE1:TYPE1:SENS1
+portcon udp 1001-1009 USER1:ROLE1:TYPE1:SENS1
+portcon tcp 2000 USER1:ROLE1:TYPE1:SENS1
+portcon tcp 2001-2009 USER1:ROLE1:TYPE1:SENS1
+portcon dccp 3000 USER1:ROLE1:TYPE1:SENS1
+portcon dccp 3001-3009 USER1:ROLE1:TYPE1:SENS1
+netifcon if01 USER1:ROLE1:TYPE1A:SENS1 USER1:ROLE1:TYPE1B:SENS1
+nodecon 10.0.0.1 255.255.255.255 USER1:ROLE1:TYPE1:SENS1
+nodecon fc00::0 ffff:: USER1:ROLE1:TYPE1:SENS1

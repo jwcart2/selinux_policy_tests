@@ -1,0 +1,6 @@
+test_01.conf - NON-MLS: The minimum policy.conf
+test_02.conf - MLS    : The minimum policy.conf
+test_03.conf - NON-MLS: All rules, but no blocks
+test_04.conf - MLS    : All rules, but no blocks
+test_05.conf - NON_MLS: Test rules in optional and if blocks
+test_06.conf - MLS    : Test rules in optional and if blocks

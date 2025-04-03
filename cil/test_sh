@@ -1,0 +1,42 @@
+#!/usr/bin/bash
+
+VER=30
+PREFIX=/home/jim/local
+
+export LD_LIBRARY_PATH=$PREFIX/lib:$PREFIX/usr/lib:${LD_LIBRARY_PATH}
+
+rm *.bin
+rm *.bin.cil
+rm *.diff
+
+for T in 03
+do
+	echo "test_$T"
+	$PREFIX/usr/bin/secilc -c $VER -M 1 -t xen -o test_$T.bin test_$T.cil
+	$PREFIX/usr/bin/checkpolicy -M -C -b -o test_$T.bin.cil test_$T.bin
+    DR=`diff test_$T.bin orig/test_$T.bin | wc -l`
+    if [ $DR != 0 ]
+    then
+	echo "test_$T.bin and orig/test_$T.bin are different"
+	#echo "Performing: sediff orig/test_$T.bin \\; test_$T.bin > test_$T.sediff"
+	#sediff orig/test_$T.bin test_$T.bin > test_$T.sediff
+
+    diff -u orig/test_$T.bin.cil test_$T.bin.cil > test_$T.diff
+    fi
+done
+
+for T in 01 02 04 05 06 07 08 10 11 12 13 14 15 16 17 18
+do
+	echo "test_$T"
+	$PREFIX/usr/bin/secilc -c $VER -M 1 -o test_$T.bin test_$T.cil
+	$PREFIX/usr/bin/checkpolicy -M -C -b -o test_$T.bin.cil test_$T.bin
+    DR=`diff test_$T.bin orig/test_$T.bin | wc -l`
+    if [ $DR != 0 ]
+    then
+	echo "test_$T.bin and orig/test_$T.bin are different"
+	#echo "Performing: sediff orig/test_$T.bin \\; test_$T.bin > test_$T.sediff"
+	#sediff orig/test_$T.bin test_$T.bin > test_$T.sediff
+
+    diff -u orig/test_$T.bin.cil test_$T.bin.cil > test_$T.diff
+    fi
+done

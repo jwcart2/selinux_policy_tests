@@ -1,0 +1,42 @@
+#!/usr/bin/bash
+
+PREFIX=/home/jim/local
+
+export LD_LIBRARY_PATH=$PREFIX/lib:$PREFIX/usr/lib:${LD_LIBRARY_PATH}
+
+rm *.bin
+rm *.bin.conf
+
+for T in 01 03 05
+do
+	echo "test_$T"
+	$PREFIX/usr/bin/checkpolicy -o test_$T.bin test_$T.conf
+	$PREFIX/usr/bin/checkpolicy -F -b -o test_$T.bin.conf test_$T.bin
+done
+
+for T in 02 04 06
+do
+	echo "test_$T"
+	$PREFIX/usr/bin/checkpolicy -M -o test_$T.bin test_$T.conf
+	$PREFIX/usr/bin/checkpolicy -F -b -M -o test_$T.bin.conf test_$T.bin
+done
+
+for T in 01 02 03 04 05 06
+do
+	DR=`diff test_$T.bin orig_bin/test_$T.bin | wc -l`
+	if [ $DR != 0 ]
+	then
+		echo "test_$T.bin and orig_bin/test_$T.bin are different"
+		#sediff orig_bin/test_$T.bin test_$T.bin > test_$T.sediff
+	fi
+done
+
+for T in 01 02 03 04 05 06
+do
+	DR=`diff test_$T.bin.conf orig_conf/test_$T.bin.conf | wc -l`
+	if [ $DR != 0 ]
+	then
+		echo "test_$T.bin.conf and orig_conf/test_$T.bin.conf are different"
+		diff -u orig_conf/test_$T.bin.conf test_$T.bin.conf > test_$T.diff
+	fi
+done

@@ -1,0 +1,39 @@
+; Test "all" for classmap and classpermission based on class using only perms
+; from a common
+
+(class CLASS (PERM))
+(classorder (CLASS))
+(sid SID)
+(sidorder (SID))
+(user USER)
+(role ROLE)
+(type TYPE)
+(category CAT)
+(categoryorder (CAT))
+(sensitivity SENS)
+(sensitivityorder (SENS))
+(sensitivitycategory SENS (CAT))
+(allow TYPE self (CLASS (PERM)))
+(roletype ROLE TYPE)
+(userrole USER ROLE)
+(userlevel USER (SENS))
+(userrange USER ((SENS)(SENS (CAT))))
+(sidcontext SID (USER ROLE TYPE ((SENS)(SENS))))
+
+
+(common co1 (cop1))
+(class cl1 ())
+(classcommon cl1 co1)
+(classorder (CLASS cl1))
+
+(classpermission cp1)
+(classpermissionset cp1 (cl1 (all)))
+
+
+(common co2 (cop2))
+(class cl2 ())
+(classcommon cl2 co2)
+(classorder (cl1 cl2))
+
+(classmap cm2 (cmp2))
+(classmapping cm2 cmp2 (cl2 (all)))

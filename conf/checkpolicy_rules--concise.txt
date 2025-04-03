@@ -1,0 +1,183 @@
+0| base_policy
+    1! classes
+        2! CLASS identifier
+    1! initial_sids
+        2! SID identifier
+    1! access_vectors
+        2? COMMON identifier { identifier_list }
+        2! CLASS identifier { identifier_list }
+           CLASS identifier INHERITS identifier
+           CLASS identifier INHERITS identifier { identifier_list }
+    1? opt_default_rules
+        2| DEFAULT_USER names SOURCE ;
+           DEFAULT_USER names TARGET ;
+        2| DEFAULT_ROLE names SOURCE ;
+           DEFAULT_ROLE names TARGET ;
+        2| DEFAULT_TYPE names SOURCE ;
+           DEFAULT_TYPE names TARGET ;
+        2| DEFAULT_RANGE names SOURCE LOW ;
+           DEFAULT_RANGE names SOURCE HIGH ;
+           DEFAULT_RANGE names SOURCE LOW_HIGH ;
+           DEFAULT_RANGE names TARGET LOW ;
+           DEFAULT_RANGE names TARGET HIGH ;
+           DEFAULT_RANGE names TARGET LOW_HIGH ;
+           DEFAULT_RANGE names GLBLUB ;                
+    1? opt_mls
+        2! SENSITIVITY identifier ;
+           SENSITIVITY identifier ALIAS names ;
+        2! DOMINANCE identifier
+           DOMINANCE identifier_list
+        2? CATEGORY identifier ;
+           CATEGORY identifier ALIAS names ;
+        2! LEVEL identifier ;
+           LEVEL identifier : id_comma_list ;
+        2! mlspolicy
+            3| MLSCONSTRAIN names names cexpr ;
+            3| MLSVALIDATETRANS name cexpr ;
+    1! te_rbac
+        2| te_decl
+            3| ATTRIBUTE idenitifier ;
+            3| EXAPNDATTRIBUTE names bool_val ;
+            3| TYPE identifier ;
+               TYPE identifier , id_comma_list ;
+               TYPE identifier ALIAS names ;
+               TYPE identifier ALIAS names , id_comma_list ;
+            3| TYPEALIAS identifier ALIAS names ;
+            3| TYPEATTRIBUTE identifier id_comma_list ;
+            3| TYPEBOUNDS identifier id_comma_list ;
+            3| BOOL identifier bool_val ;
+            3| TUNABLE identifier bool_val ;
+            3| TYPE_TRANSITION names names : names identifier ;
+               TYPE_TRANSITION names names : names identifier filename ;
+               TYPE_MEMBER names names : names identifier ;
+               TYPE_CHANGE names names : names identifier ;
+            3| RANGE_TRANSITION names names mls_range_def ;
+               RANGE_TRANSITION names names : names mls_range_def ;
+            3| ALLOW names names : names names :
+               AUDITALLOW names names : names names :
+               AUDITDENY names names : names names :
+               DONTAUDIT names names : names names :
+               NEVERALLOW names names : names names :
+               ALLOWXPERM names names : names identifier xperms ;
+               AUDITALLOWXPERM names names : names identifier xperms ;
+               DONTAUDITXPERM names names : names identifier xperms ;
+               NEVERALLOWXPERM names names : names identifier xperms ;
+            3| PERMISSIVE identifier ;
+        2| rbac_decl
+            3| ATTRIBUTE_ROLE identifier ;
+            3| ROLE identifier TYPES names ;
+            3| ROLE_TRANSITION names names identifier ;
+               ROLE_TRANSITION names names : names identifier ;
+            3| ALLOW names names ;
+            3| ROLEATTRIBUTE identifier , id_comma_list ;
+            3| ROLE identifier , id_comma_list
+        2| IF cond_expr { cond_pol_list }
+           IF cond_expr { cond_pol_list } ELSE { cond_pol_list }
+            3? cond_pol_list
+                4| TYPE_TRANSITION names names : names identifier ;
+                   TYPE_MEMBER names names : names identifier ;
+                   TYPE_CHANGE names names : names identifier ;
+                4| ALLOW names names : names names ;
+                   AUDITALLOW names names : names names ;
+                   AUDITDENY names names : names names ;
+                   DONTAUDIT names names : names names ;
+                4| REQUIRE { require_list }
+                    5| CLASS identifier names ;
+                    5| ROLE identifier ;
+                       ROLE identifier , id_comma_list ;
+                       TYPE identifier ;
+                       TYPE identifier , id_comma_list ;
+                       ATTRIBUTE identifier ;
+                       ATTRIBUTE identifier , id_comma_list ;
+                       ATTRIBUTE_ROLE identifier ;
+                       ATTRIBUTE_ROLE identifier , id_comma_list ;
+                       USER identifier ;
+                       USER identifier , id_comma_list ;
+                       BOOL identifier ;
+                       BOOL identifier , id_comma_list ;
+                       TUNABLE identifier ;
+                       TUNABLE identifier , id_comma_list ;
+                       SENSITIVITY identifier ;
+                       SENSITIVITY identifier , id_comma_list ;
+                       CATEGORY identifier ;
+                       CATEGORY identifier , id_comma_list ;
+        2| OPTIONAL { avrules_block }
+           OPTIONAL { avrules_block } ELSE { avrules_block }
+            3! avrules_block
+                4! avrule_decl
+                    5| rbac_decl
+                        --see above
+                    5| te_decl
+                        --see above
+                    5| IF cond_expr { cond_pol_list }
+                       IF cond_expr { cond_pol_list } ELSE { cond_pol_list }
+                        --see above for cond_pol_list
+                    5| REQUIRE { require_list }
+                        --see above for require_list
+                    5| OPTIONAL { avrules_block }
+                       OPTIONAL { avrules_block } ELSE { avrules_block }
+                        --nested--see above for avrules_block
+                4! USER identifier ROLES names ;
+                   USER identifier ROLES LEVEL mls_level_def RANGE mls_range_def ;
+        2| POLICYCAP identifier ;
+    1! users
+        2! USER identifier ROLES names ;
+        2! USER identifier ROLES LEVEL mls_level_def RANGE mls_range_def ;
+    1? opt_constraints
+        2| CONSTRAIN names names cexpr ;
+        2| VALIDATETRANS names cexpr ;
+    1! initial_sid_contexts
+        2! SID identifier security_context_def
+            3! security_context_def
+                identifier : identifier : identifier
+                identifier : identifier : identifier : mls_range_def
+    1? opt_fs_contexts
+        2? FSCON number number security_context_def security_context_def
+    1? opt_fs_uses
+        2? FSUSEXATTR filesystem security_context_def ;
+           FSUSETASK identifier security_context_def ;
+           FSUSETRANS identifier security_context_def ;
+    1? opt_genfs_contexts
+        2? GENFSCON filesystem path - identifier security_context_def
+           GENFSCON filesystem path -- security_context_def
+           GENFSCON filesystem path security_context_def
+    1? net_contexts
+        2? PORTCON identifier number security_context_def
+           PORTCON identifier number - number security_context_def
+        2? NETIFCON identifier security_context_def security_context_def
+        2? NODECON ipv4_addr_def ipv4_addr_def security_context_def
+           NODECON ipv4_cidr_def security_context_def
+           NODECON ipv6_addr ipv6_addr security_context_def
+           NODECON ipv6_cidr security_context_def
+    1? opt_dev_contexts
+        2| PIRQCON number security_context_def
+        2| IOMEMCON number64 security_context_def
+           IOMEMCON number64 - number64 security_context_def
+        2| IOPORTCON number security_context_def
+           IOPORTCON number - number security_context_def
+        2| PCIDEVICECON number security_context_def
+        2| DEVICETREECON path security_context_def
+    1? opt_ibpkey_contexts
+        2? IBPKEYCON ipv6_addr number security_context_def
+           IBPKEYCON ipv6_addr number - number security_context_def
+    1? opt_ibendport_contexts
+        2? IBENDPORTCON identifier number security_context_def
+0| module_policy
+    1! MODULE identifier version_identifier ;
+    1! avrules_block # Same as optional block
+        2! avrule_decl
+            3| rbac_decl
+                --see above
+            3| te_decl
+                --see above
+            3| IF cond_expr { cond_pol_list }
+               IF cond_expr { cond_pol_list } ELSE { cond_pol_list }
+                --see above for cond_pol_list
+            3| REQUIRE { require_list }
+                --see above for require_list
+            3| OPTIONAL { avrules_block }
+               OPTIONAL { avrules_block } ELSE { avrules_block }
+                --see above for avrules_block
+        2! USER identifier ROLES names ;
+           USER identifier ROLES LEVEL mls_level_def RANGE mls_range_def ;
+

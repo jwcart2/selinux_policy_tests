@@ -1,0 +1,32 @@
+module mod_03 1.0;
+
+require {
+	class CLASS3 { PERM3A PERM3B CPERM3A CPERM3B };
+	role ROLE3;
+	type TYPE3;
+	bool BOOL3;
+}
+
+type TYPE3A;
+type TYPE3B;
+allow TYPE3 self : CLASS3 PERM3A;
+if (BOOL3) {
+   allow TYPE3A self:CLASS3 CPERM3A;
+} else {
+  allow TYPE3A self:CLASS3 CPERM3B;
+}
+role ROLE3A;
+role ROLE3 types TYPE3;
+role ROLE3A types TYPE3A;
+
+optional {
+		 require {
+		 		 type TYPE3B;
+				 }
+		allow TYPE3 self : CLASS3 PERM3B;
+		if (not BOOL3) {
+		   allow TYPE3B self:CLASS3 CPERM3A;
+		} else {
+		  allow TYPE3B self:CLASS3 CPERM3B;
+		}
+}

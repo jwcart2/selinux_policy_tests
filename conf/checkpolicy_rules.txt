@@ -1,0 +1,200 @@
+0| base_policy
+    1! classes
+        class_def       => CLASS identifier
+    1! initial_sids
+        initial_sid_def => SID identifier
+    1! access_vectors
+        2? opt_common_perms
+            3? common_perms
+                4! common_perms_def => COMMON identifier { identifier_list }
+        2! av_perms
+            3! av_perms_def => CLASS identifier { identifier_list }
+                         => CLASS identifier INHERITS identifier
+                         => CLASS identifier INHERITS identifier { identifier_list }
+    1? opt_default_rules
+        2? default_rules
+            3| default_user_def   => DEFAULT_USER names SOURCE ;
+                                  => DEFAULT_USER names TARGET ;
+            3| default_role_def   => DEFAULT_ROLE names SOURCE ;
+                                  => DEFAULT_ROLE names TARGET ;
+            3| default_type_def   => DEFAULT_TYPE names SOURCE ;
+                                  => DEFAULT_TYPE names TARGET ;
+            3| default_range_def  => DEFAULT_RANGE names SOURCE LOW ;
+                                  => DEFAULT_RANGE names SOURCE HIGH ;
+                                  => DEFAULT_RANGE names SOURCE LOW_HIGH ;
+                                  => DEFAULT_RANGE names TARGET LOW ;
+                                  => DEFAULT_RANGE names TARGET HIGH ;
+                                  => DEFAULT_RANGE names TARGET LOW_HIGH ;
+                                  => DEFAULT_RANGE names GLBLUB ;                
+    1? opt_mls
+        2? mls
+            3! sensitivities
+                4! sensitivity_def => SENSITIVITY identifier ;
+                                   => SENSITIVITY identifier ALIAS names ;
+            3! dominance           => DOMINANCE identifier
+                                   => DOMINANCE identifier_list
+            3? opt_categories
+                4? categories
+                    5! category_def  => CATEGORY identifier ;
+                                     => CATEGORY identifier ALIAS names ;
+            3! levels
+                4! level_def  => LEVEL identifier ;
+                              => LEVEL identifier : id_comma_list ;
+            3! mlspolicy
+                4! mlspolicy_decl
+                    5| mlsconstraint_def    => MLSCONSTRAIN names names cexpr ;
+                    5| mlsvalidatetrans_def => MLSVALIDATETRANS name cexpr ;
+    1! te_rbac
+        2! te_rbac_decl
+            3| te_decl
+                4| attribute_def       => ATTRIBUTE idenitifier ;
+                4| expandattribute_def => EXAPNDATTRIBUTE names bool_val ;
+                4| type_def            => TYPE identifier ;
+                                       => TYPE identifier , id_comma_list ;
+                                       => TYPE identifier ALIAS names ;
+                                       => TYPE identifier ALIAS names , id_comma_list ;
+                4| typealias_def       => TYPEALIAS identifier ALIAS names ;
+                4| typeattribute_def   => TYPEATTRIBUTE identifier id_comma_list ;
+                4| typebounds_def      => TYPEBOUNDS identifier id_comma_list ;
+                4| bool_def            => BOOL identifier bool_val ;
+                4| tunable_def         => TUNABLE identifier bool_val ;
+                4| transition_def      => TYPE_TRANSITION names names : names identifier ;
+                                       => TYPE_TRANSITION names names : names identifier filename ;
+                                       => TYPE_MEMBER names names : names identifier ;
+                                       => TYPE_CHANGE names names : names identifier ;
+                4| range_trans_def     => RANGE_TRANSITION names names mls_range_def ;
+                                       => RANGE_TRANSITION names names : names mls_range_def ;
+                4| te_avtab_def
+                    5| allow_def            => ALLOW names names : names names :
+                    5| auditallow_def       => AUDITALLOW names names : names names :
+                    5| auditdeny_def        => AUDITDENY names names : names names :
+                    5| dontaudit_def        => DONTAUDIT names names : names names :
+                    5| neverallow_def       => NEVERALLOW names names : names names :
+                    5| xperm_allow_def      => ALLOWXPERM names names : names identifier xperms ;
+                    5| xperm_auditallow_def => AUDITALLOWXPERM names names : names identifier xperms ;
+                    5| xperm_dontaudit_def  => DONTAUDITXPERM names names : names identifier xperms ;
+                    5| xperm_neverallow_def => NEVERALLOWXPERM names names : names identifier xperms ;
+                4| permissive_def      => PERMISSIVE identifier ;
+            3| rbac_decl
+                4| attribute_role_def => ATTRIBUTE_ROLE identifier ;
+                4| role_type_def      => ROLE identifier TYPES names ;
+                4| role_trans_def     => ROLE_TRANSITION names names identifier ;
+                                      => ROLE_TRANSITION names names : names identifier ;
+                4| role_allow_def     => ALLOW names names ;
+                4| roleattribute_def  => ROLEATTRIBUTE identifier , id_comma_list ;
+                4| role_attr_def      => ROLE identifier , id_comma_list
+            3| cond_stmt_def => IF cond_expr { cond_pol_list }
+                             => IF cond_expr { cond_pol_list } ELSE { cond_pol_list }
+                4? cond_pol_list
+                    5! cond_rule_def
+                        6| cond_transition_def => TYPE_TRANSITION names names : names identifier ;
+                                               => TYPE_MEMBER names names : names identifier ;
+                                               => TYPE_CHANGE names names : names identifier ;
+                        6| cond_te_avtab_def
+                            7| cond_allow_def      => ALLOW names names : names names ;
+                            7| cond_auditallow_def => AUDITALLOW names names : names names ;
+                            7| cond_auditdeny_def  => AUDITDENY names names : names names ;
+                            7| cond_dontaudit_def  => DONTAUDIT names names : names names ;
+                        6| require_block  => REQUIRE { require_list }
+                            7! require_list
+                                8! require_decl
+                                    9| require_class => CLASS identifier names ;
+                                    9| require_decl_def => ROLE identifier ;
+                                                        => ROLE identifier , id_comma_list ;
+                                                        => TYPE identifier ;
+                                                        => TYPE identifier , id_comma_list ;
+                                                        => ATTRIBUTE identifier ;
+                                                        => ATTRIBUTE identifier , id_comma_list ;
+                                                        => ATTRIBUTE_ROLE identifier ;
+                                                        => ATTRIBUTE_ROLE identifier , id_comma_list ;
+                                                        => USER identifier ;
+                                                        => USER identifier , id_comma_list ;
+                                                        => BOOL identifier ;
+                                                        => BOOL identifier , id_comma_list ;
+                                                        => TUNABLE identifier ;
+                                                        => TUNABLE identifier , id_comma_list ;
+                                                        => SENSITIVITY identifier ;
+                                                        => SENSITIVITY identifier , id_comma_list ;
+                                                        => CATEGORY identifier ;
+                                                        => CATEGORY identifier , id_comma_list ;
+            3| optional_block => OPTIONAL { avrules_block }
+                              => OPTIONAL { avrules_block } ELSE { avrules_block }
+                4! avrules_block
+                    5! avrules_decls
+                        6! avrule_decl
+                            7| rbac_decl
+                                --see above
+                            7| te_decl
+                                --see above
+                            7| cond_stmt_def
+                                --see above
+                            7| require_block
+                                --see above
+                            7| optional_block
+                                --recursive
+                    5! avrule_user_defs
+                        6! user_def => USER identifier ROLES names ;
+                                    => USER identifier ROLES LEVEL mls_level_def RANGE mls_range_def ;
+            3| policycap_def => POLICYCAP identifier ;
+    1! users
+        2! user_def => USER identifier ROLES names ;
+                    => USER identifier ROLES LEVEL mls_level_def RANGE mls_range_def ;
+    1? opt_constraints
+        2? constraints
+            3? constraint_decl
+                4| constraint_def    => CONSTRAIN names names cexpr ;
+                4| validatetrans_def => VALIDATETRANS names cexpr ;
+    1! initial_sid_contexts
+        2! initial_sid_context_def => SID identifier security_context_def
+            3! security_context_def => identifier : identifier : identifier opt_mls_range_def
+                4? opt_mls_range_def => : mls_range_def
+    1? opt_fs_contexts
+        2? fs_contexts
+            3! fs_context_def => FSCON number number security_context_def security_context_def
+    1? opt_fs_uses
+        2? fs_uses
+            3! fs_use_def => FSUSEXATTR filesystem security_context_def ;
+                          => FSUSETASK identifier security_context_def ;
+                          => FSUSETRANS identifier security_context_def ;
+    1? opt_genfs_contexts
+        2? genfs_contexts
+            3! genfs_context_def => GENFSCON filesystem path - identifier security_context_def
+                                 => GENFSCON filesystem path -- security_context_def
+                                 => GENFSCON filesystem path security_context_def
+    1? net_contexts
+        2? opt_port_contexts
+            3? port_contexts
+                4! port_context_def => PORTCON identifier number security_context_def
+                                    => PORTCON identifier number - number security_context_def
+        2? opt_netif_contexts
+            3? netif_contexts
+                4! netif_context_def => NETIFCON identifier security_context_def security_context_def
+        2? opt_node_contexts
+            3? node_contexts
+                4! node_context_def => NODECON ipv4_addr_def ipv4_addr_def security_context_def
+                                    => NODECON ipv4_cidr_def security_context_def
+                                    => NODECON ipv6_addr ipv6_addr security_context_def
+                                    => NODECON ipv6_cidr security_context_def
+    1? opt_dev_contexts
+        2? dev_contexts
+            3! dev_context_def
+                4| pirq_context_def   => PIRQCON number security_context_def
+                4| iomem_context_def  => IOMEMCON number64 security_context_def
+                                      => IOMEMCON number64 - number64 security_context_def
+                4| ioport_context_def => IOPORTCON number security_context_def
+                                      => IOPORTCON number - number security_context_def
+                4| pci_context_def    => PCIDEVICECON number security_context_def
+                4| dtree_context_def  => DEVICETREECON path security_context_def
+    1? opt_ibpkey_contexts
+        2? ibpkey_context
+            3! ibpkey_context_def => IBPKEYCON ipv6_addr number security_context_def
+                                  => IBPKEYCON ipv6_addr number - number security_context_def
+    1? opt_ibendport_contexts
+        2? ibendport_contexts
+            3! ibendport_context_def => IBENDPORTCON identifier number security_context_def
+0| module_policy
+    1! module_def => MODULE identifier version_identifier ;
+    1! avrules_block
+        --see above in optional_block
+    
+

@@ -1,0 +1,39 @@
+module mod_02 0.0.1;
+
+require {
+	class CLASS01 { PERM01 };
+	class CLASS02 { PERM02 };
+	class CLASS03 { PERM03 };
+	class CLASS04 { PERM04 };
+	class CLASS05 { PERM05 };
+	class CLASS06 { PERM06 };
+}
+
+bool b1 false;
+
+type ta;
+type tb;
+type tc;
+type t1a;
+type t1b;
+type t1c;
+type t1d;
+
+allow ta self : CLASS01 PERM01;
+
+type_transition ta tb : CLASS01 tc "file01";
+type_transition ta tb : CLASS02 tc "[file02]";
+type_transition ta tb : CLASS03 tc "file03";
+#type_transition ta tb : CLASS04 tc "file04" prefix;
+#type_transition ta tb : CLASS05 tc "file05" suffix;
+
+if (b1) {
+  allow t1a self : CLASS01 PERM01;
+  type_transition t1a t1b : CLASS01 t1c;
+  #type_transition t1a self : CLASS01 t1c;
+  #type_transition t1a t1b : CLASS03 t1c "fileb1true"; # not allowed yet
+} else {
+  allow t1a self : CLASS02 PERM02;
+  type_transition t1a t1b : CLASS02 t1d;
+  #type_transition t1a t1b : CLASS04 t1d "fileb1false"; # not allowed yet
+}
