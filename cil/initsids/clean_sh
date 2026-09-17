@@ -1,0 +1,7 @@
+
+rm -f tmp/*.tree
+rm -f tmp/*.bin
+rm -f tmp/*.bin.cil
+rm -f tmp/*.bin.conf
+rm -f tmp/*.conf
+rm -f tmp/file_contexts

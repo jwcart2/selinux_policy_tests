@@ -1,0 +1,40 @@
+module mtest_mod1_12 1.0;
+
+# If module requires not met then there will be a link error
+
+# Having the "ioctl" perm be the 15th perm means that it will have id 16
+# and have its high-bit set which will cause a segfault in link_modules()
+# At least until Christian's patch is applied
+
+require {
+	class CLASS2 { PERM2 p2x01 p2x02 p2x03 p3x04 p2x05 p2x06 p2x07 p2x08 p2x09 p2x10 p2x11 p2x12 p2x13 ioctl };
+}
+
+type TM1;
+type tm1a;
+type tm1b;
+type tm1c;
+type tm1d;
+type tm1e;
+type tm1f;
+type tm1o;
+
+allow TM1 self : CLASS2 PERM2;
+
+allow tm1a tm1o : CLASS2 ioctl;
+allowxperm tm1a tm1o : CLASS2 ioctl 0x0008;
+
+allow tm1b tm1o : CLASS2 ioctl;
+allowxperm tm1b tm1o : CLASS2 ioctl 0x0080;
+
+allow tm1c tm1o : CLASS2 ioctl;
+allowxperm tm1c tm1o : CLASS2 ioctl 0x00ff;
+
+allow tm1d tm1o : CLASS2 ioctl;
+allowxperm tm1d tm1o : CLASS2 ioctl 0x7fff;
+
+allow tm1e tm1o : CLASS2 ioctl;
+allowxperm tm1e tm1o : CLASS2 ioctl 0x8001;
+
+allow tm1f tm1o : CLASS2 ioctl;
+allowxperm tm1f tm1o : CLASS2 ioctl 0xffff;

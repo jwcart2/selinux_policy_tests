@@ -1,0 +1,39 @@
+module mtest_mod2_03 1.0;
+
+require {
+	class cl3 { p3 };
+	type t1p;
+	type t2p;
+}
+
+type t1c2;
+type t1cx2;
+type t2c2;
+type t2cx2a;
+type t3p;
+type t3c2;
+type td3;
+
+
+typebounds t1p t1c2;
+typebounds t2p t2c2;
+typebounds t3p t3c2;
+
+optional {
+  require {
+    type t1x;
+  }
+  typebounds t1p t1cx2;
+}
+
+optional {
+  require {
+    type t2x;
+  }
+  type t2cx2b;
+  typebounds t2p t2cx2a;
+  typebounds t2p t2cx2b;
+}
+
+allow td3 t3p : cl3 p3;
+allow td3 t3c2 : cl3 p3;

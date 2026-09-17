@@ -1,0 +1,28 @@
+module mtest_attr_mod2_02 1.0;
+
+require {
+	class cl5 { p5 };
+	class cl6 { p6 };
+}
+
+attribute at5;
+attribute at6;
+
+type t5c;
+type t6c;
+type td5;
+type td6;
+
+typeattribute t5c at5;
+typeattribute t6c at6;
+typeattribute at6 at5;
+
+optional {
+  require {
+    attribute at4;
+  }
+  typeattribute at5 at4;
+}
+
+allow td5 at5 : cl5 p5;
+allow td6 at6 : cl6 p6;

@@ -1,0 +1,68 @@
+module mtest_mod2_42 1.0;
+
+require {
+	class CLASS1 { PERM1 };
+}
+
+type t3a;
+type t3b;
+type t3c;
+type t3d;
+type t3e;
+type t3f;
+type t3g;
+type t3h;
+type t3i;
+type t3j;
+
+optional {
+  require {
+    class cl4 { p4a };
+  }
+  allow t3d self : cl4 { p4a };
+}
+
+optional {
+  require {
+    class cl5 { p5a };
+  }
+  allow t3e self : cl5 { p5a };
+}
+
+optional {
+  require {
+    class cl2 { p2a };
+  }
+  allow t3b self : cl2 { p2a };
+}
+
+optional {
+  require {
+    class cl9 { p9a };
+  }
+  allow t3i self : cl9 { p9a };
+}
+
+optional {
+  require {
+    class cl1 { p1a };
+  }
+  allow t3a self : cl1 { p1a };
+}
+
+optional {
+  require {
+    class cl3 { p3a };
+  }
+  allow t3c self : cl3 { p3a };
+}
+
+optional {
+  require {
+    class cl7 { p7a };
+  }
+  allow t3g self : cl7 { p7a };
+}
+
+
+allow t3j self : CLASS1 PERM1;

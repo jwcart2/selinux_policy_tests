@@ -1,0 +1,94 @@
+(handleunknown deny)
+
+(class CLASS1 (PERM1))
+(classorder (CLASS1))
+
+(sid kernel)
+(sid security)
+(sid unlabeled)
+(sidorder (kernel security unlabeled))
+
+(mls true)
+(sensitivity s01)
+(sensitivityorder (s01))
+(category c01)
+(categoryorder (c01))
+(sensitivitycategory s01 (c01))
+(mlsconstrain (CLASS1 (PERM1)) (and (dom h1 h2) (domby l1 h1)))
+
+(type TYPE1)
+(type tb1)
+(type tb2)
+(type tb3)
+(type tb4)
+(type tb5)
+(type tb6)
+(type tb7)
+(type tb8)
+
+(allow TYPE1 self (CLASS1 (PERM1)))
+
+(role object_r)
+(role ROLE1)
+
+(roletype object_r TYPE1)
+(roletype object_r tb1)
+(roletype object_r tb2)
+(roletype ROLE1 TYPE1)
+
+(user USER1)
+(userrole USER1 object_r)
+(userrole USER1 ROLE1)
+(userlevel USER1 (s01))
+(userrange USER1 ((s01) (s01 (c01))))
+
+(constrain (CLASS1 (PERM1)) (not (and (eq t1 TYPE1) (neq u1 u2))))
+
+(sidcontext kernel (USER1 ROLE1 TYPE1 ((s01)(s01))))
+(sidcontext security (USER1 ROLE1 TYPE1 ((s01)(s01))))
+(sidcontext unlabeled (USER1 ROLE1 TYPE1 ((s01)(s01))))
+
+(boolean bool01 false)
+(boolean bool02 false)
+(boolean bool03 true)
+(tunable tun01 false)
+(tunable tun02 true)
+(tunable tun03 false)
+
+(booleanif (bool01)
+  (true
+    (allow tb1 self (CLASS1 (PERM1)))
+  )
+  (false
+    (allow tb2 self (CLASS1 (PERM1)))
+  )
+)
+
+(tunableif (tun01)
+  (true
+    (allow tb3 self (CLASS1 (PERM1)))
+  )
+  (false
+    (allow tb4 self (CLASS1 (PERM1)))
+  )
+)
+
+;; Needs "-P" (preserve tunables)
+(booleanif (or bool02 tun02)
+  (true
+    (allow tb5 self (CLASS1 (PERM1)))
+  )
+  (false
+    (allow tb6 self (CLASS1 (PERM1)))
+  )
+)
+
+;; Needs "-P" (preserve tunables)
+(tunableif (or bool03 tun03)
+  (true
+    (allow tb7 self (CLASS1 (PERM1)))
+  )
+  (false
+    (allow tb8 self (CLASS1 (PERM1)))
+  )
+)

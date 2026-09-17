@@ -1,0 +1,39 @@
+#!/usr/bin/bash
+
+PREFIX=/home/jwcart2/local
+
+export LD_LIBRARY_PATH=$PREFIX/lib:$PREFIX/usr/lib:${LD_LIBRARY_PATH}
+
+
+echo "checkmodule: base_1.mod"
+$PREFIX/usr/bin/checkmodule -o base_1.mod base_1.te
+
+echo "checkmodule: mod_2.mod"
+$PREFIX/usr/bin/checkmodule -m -o mod_2.mod mod_2.te
+
+echo "checkmodule: mod_3.mod"
+$PREFIX/usr/bin/checkmodule -m -o mod_3.mod mod_3.te
+
+echo "semodule_package: base_1.pp"
+$PREFIX/usr/bin/semodule_package -o base_1.pp -m base_1.mod
+
+echo "semodule_package: mod_2.pp"
+$PREFIX/usr/bin/semodule_package -o mod_2.pp -m mod_2.mod
+
+echo "semodule_package: mod_3.pp"
+$PREFIX/usr/bin/semodule_package -o mod_3.pp -m mod_3.mod
+
+echo "semodule_link: policy_mod.lnk"
+$PREFIX/usr/bin/semodule_link -o policy_mod.lnk base_1.pp mod_2.pp mod_3.pp
+
+echo "semodule_expand: policy_mod.bin"
+$PREFIX/usr/bin/semodule_expand -a policy_mod.lnk policy_mod.bin
+
+echo "checkpolicy: policy_mod.bin.conf"
+$PREFIX/usr/bin/checkpolicy -F -b -o policy_mod.bin.conf policy_mod.bin
+
+mv *.mod tmp/
+mv *.pp tmp/
+mv *.lnk tmp/
+mv *.bin tmp/
+mv *.bin.conf tmp/

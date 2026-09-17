@@ -1,0 +1,69 @@
+module mtest_mod2_43 1.0;
+
+require {
+	class CLASS1 { PERM1 };
+}
+
+type t3a;
+type t3b;
+type t3c;
+type t3d;
+type t3e;
+type t3f;
+type t3g;
+type t3h;
+type t3i;
+type t3j;
+
+optional {
+  require {
+    class cl4 { cp2c cp2b cp2a cp2d };
+  }
+  allow t3d self : cl4 { cp2a cp2b cp2d cp2c };
+}
+
+optional {
+  require {
+    class cl5 { cp1c cp1a };
+  }
+  allow t3e self : cl5 { cp1c cp1a };
+}
+
+optional {
+  require {
+    class cl2 { cp2a p2a cp2d cp2c cp2b };
+  }
+  #allow t3b self : cl2 { cp2d cp2a cp2b cp2c p2a };
+  allow t3b self : cl2 *;
+}
+
+optional {
+  require {
+    class cl9 { cp1c p9a };
+  }
+  allow t3i self : cl9 { p9a cp1c };
+}
+
+optional {
+  require {
+    class cl1 { p1a cp1b };
+  }
+  allow t3a self : cl1 { cp1b p1a };
+}
+
+optional {
+  require {
+    class cl3 { cp1a cp1b p3a };
+  }
+  allow t3c self : cl3 { cp1a cp1b p3a };
+}
+
+optional {
+  require {
+    class cl7 { cp1a cp1b cp1c p7a };
+  }
+  allow t3g self : cl7 { cp1a cp1b cp1c p7a };
+}
+
+
+allow t3j self : CLASS1 PERM1;

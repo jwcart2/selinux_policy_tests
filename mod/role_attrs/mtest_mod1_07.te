@@ -1,0 +1,156 @@
+module mtest_mod1_07 1.0;
+
+require {
+	class cl2 { p2 };
+	sensitivity SENS1;
+}
+
+type t2_;
+type t2b;
+type t5b;
+type t6b;
+type t7b;
+type t8b;
+type td2;
+
+allow td2 t2b : cl2 p2;
+
+attribute_role ar2;
+attribute_role ar2b;
+attribute_role ar5b;
+attribute_role ar6b;
+attribute_role ar7b;
+attribute_role ar8b;
+
+role r2b;
+role r5b;
+role r6b;
+role r7b;
+role r8b;
+role rn2;
+role rn2b;
+role rn5b;
+role rn6b;
+role rn7b;
+role rn8b;
+
+roleattribute r2b ar2b;
+roleattribute ar2b ar2;
+roleattribute r5b ar5b;
+roleattribute r6b ar6b;
+roleattribute r7b ar7b;
+roleattribute r8b ar8b;
+
+role ar2 types t2_;
+role ar2b types t2b;
+role ar5b types t5b;
+role ar6b types t6b;
+role ar7b types t7b;
+role ar8b types t8b;
+
+role_transition ar2 t2_ : cl2 rn2;
+role_transition ar2b t2b : cl2 rn2b;
+role_transition ar5b t5b : cl2 rn5b;
+role_transition ar6b t6b : cl2 rn6b;
+role_transition ar7b t7b : cl2 rn7b;
+role_transition ar8b t8b : cl2 rn8b;
+
+allow ar2 rn2;
+allow ar2b rn2b;
+allow ar5b rn5b;
+allow ar6b rn6b;
+allow ar7b rn7b;
+allow ar8b rn8b;
+
+optional {
+  require {
+    attribute_role ar1;
+	attribute_role ar1a;
+  }
+  type t1b;
+  attribute_role ar1b;
+  role r1b;
+  role rn1b;
+  role r1ab;
+  roleattribute r1b ar1b;
+  roleattribute ar1b ar1;
+  roleattribute r1ab ar1a;
+  role ar1b types t1b;
+  role_transition ar1b t1b : cl2 rn1b;
+  allow ar1b rn1b;
+}
+
+optional {
+  require {
+    attribute_role ar3;
+    attribute_role ar3b;
+	attribute_role ar3c;
+  }
+  type t3b;
+  role r3b;
+  role rn3b;
+  role r3cb;
+  roleattribute r3b ar3b;
+  roleattribute ar3b ar3;
+  roleattribute r3cb ar3c;
+  role ar3b types t3b;
+  role_transition ar3b t3b : cl2 rn3b;
+  allow ar3b rn3b;
+}
+
+optional {
+  require {
+    attribute_role ar4a;
+  }
+  type t4b;
+  attribute_role ar4b;
+  role r4b;
+  role rn4b;
+  roleattribute r4b ar4b;
+  roleattribute ar4b ar4a;
+  role ar4b types t4b;
+  role_transition ar4b t4b : cl2 rn4b;
+  allow ar4b rn4b;
+  #user us4b roles ar4b level SENS1 range SENS1;
+}
+
+optional {
+  require {
+    attribute_role ar5a;
+	role r5c;
+  }
+  roleattribute r5c ar5a;
+}
+
+optional {
+  require {
+    attribute_role ar6a;
+	role r6c;
+  }
+  roleattribute r6c ar6a;
+}
+
+optional {
+  require {
+    type t7XXX;
+    attribute_role ar7a;
+	role r7c;
+  }
+  roleattribute r7c ar7a;
+  role ar7a types t7XXX;
+}
+
+optional {
+  require {
+    attribute_role ar8a;
+	role r8c;
+  }
+  roleattribute r8c ar8a;
+}
+
+user us2 roles ar2 level SENS1 range SENS1;
+user us2b roles ar2b level SENS1 range SENS1;
+user us5b roles ar5b level SENS1 range SENS1;
+user us6b roles ar6b level SENS1 range SENS1;
+user us7b roles ar7b level SENS1 range SENS1;
+user us8b roles ar8b level SENS1 range SENS1;

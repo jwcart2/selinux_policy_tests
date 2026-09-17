@@ -1,0 +1,72 @@
+module mtest_attr_mod2_03 1.0;
+
+require {
+	class cl5 { p5 };
+	class cl6 { p6 };
+}
+
+attribute at5;
+attribute at6;
+
+type t5c;
+type t6c;
+type td5;
+type td6;
+type tn5;
+type tn6;
+type tx5;
+type tx6;
+
+typeattribute t5c at5;
+typeattribute t6c at6;
+
+optional {
+  require {
+    attribute at1;
+  }
+  type t1c;
+  typeattribute t1c at1;
+}
+
+optional {
+  require {
+    attribute at2;
+  }
+  type t2c;
+  typeattribute t2c at2;
+  typeattribute at6 at2;
+}
+
+optional {
+  require {
+    attribute at3;
+  }
+  type t3c;
+  typeattribute t3c at3;
+}
+
+optional {
+  require {
+    attribute at4;
+  }
+  type t4c;
+  typeattribute t4c at4;
+  typeattribute at6 at4;
+}
+
+allow td5 at5 : cl5 p5;
+allow td6 at6 : cl6 p6;
+
+type_transition at5 tx5 : cl5 tn5;
+type_transition at6 tx6 : cl6 tn6;
+
+role r5c;
+role r6c;
+role rn5;
+role rn6;
+
+role r5c types at5;
+role r6c types at6;
+
+role_transition r5c at5 : cl5 rn5;
+role_transition r6c at6 : cl6 rn6;

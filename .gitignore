@@ -1,0 +1,13 @@
+# Note: use "git ls-files -i --exclude-standard" to make sure no
+# tracked files are ignored as a result of any changes.
+
+# Misc
+*.patch
+*.diff
+*~
+.#*
+\#*
+
+# Failsafes
+!.gitignore
+

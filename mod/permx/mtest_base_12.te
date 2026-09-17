@@ -1,0 +1,51 @@
+
+class CLASS1
+class CLASS2
+class CLASS3
+
+sid kernel
+
+class CLASS1 { PERM1 ioctl }
+class CLASS2 { PERM2 p2x01 p2x02 p2x03 p3x04 p2x05 p2x06 p2x07 p2x08 p2x09 p2x10 p2x11 p2x12 p2x13 ioctl }
+class CLASS3 { PERM3 ioctl }
+
+sensitivity SENS1;
+dominance { SENS1 }
+level SENS1;
+mlsconstrain CLASS1 { PERM1 } ((h1 dom h2) and (l1 domby h1));
+
+
+type TYPE1;
+type tba;
+type tbb;
+type tbc;
+type tbd;
+type tbe;
+type tbf;
+type tbo;
+
+allow TYPE1 self : CLASS1 PERM1;
+
+allow tba tbo : CLASS1 ioctl;
+allowxperm tba tbo : CLASS1 ioctl 0x0008;
+
+allow tbb tbo : CLASS1 ioctl;
+allowxperm tbb tbo : CLASS1 ioctl 0x0080;
+
+allow tbc tbo : CLASS1 ioctl;
+allowxperm tbc tbo : CLASS1 ioctl 0x00ff;
+
+allow tbd tbo : CLASS1 ioctl;
+allowxperm tbd tbo : CLASS1 ioctl 0x7fff;
+
+allow tbe tbo : CLASS1 ioctl;
+allowxperm tbe tbo : CLASS1 ioctl 0x8001;
+
+allow tbf tbo : CLASS1 ioctl;
+allowxperm tbf tbo : CLASS1 ioctl 0xffff;
+
+
+role ROLE1;
+role ROLE1 types TYPE1;
+user USER1 roles ROLE1 level SENS1 range SENS1;
+sid kernel USER1:ROLE1:TYPE1:SENS1

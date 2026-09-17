@@ -1,0 +1,68 @@
+module mtest_mod1_01 1.0;
+
+# If module requires not met then there will be a link error
+require {
+	class CLASS2 { PERM2 };
+}
+
+bool bool2a false;
+bool bool2b false;
+tunable tun2a true;
+tunable tun2b true;
+
+type TM1;
+type tm1a;
+type tm1b;
+type tm1c;
+type tm1d;
+type tm1e;
+type tm1f;
+type tm1g;
+type tm1h;
+
+allow TM1 self : CLASS2 PERM2;
+
+optional {
+  require {
+    bool bool1a;
+  }
+  if (bool1a) {
+     allow tm1a self : CLASS2 PERM2;
+  }
+}
+
+optional {
+  require {
+    tunable tun1a;
+  }
+  if (tun1a) {
+     allow tm1c self : CLASS2 PERM2;
+  }
+}
+
+optional {
+  require {
+    bool bool2a;
+  }
+  if (bool2a) {
+     allow tm1e self : CLASS2 PERM2;
+  }
+}
+
+if (bool2b) {
+   allow tm1f self : CLASS2 PERM2;
+}
+
+optional {
+  require {
+    tunable tun2a;
+  }
+  if (tun2a) {
+     allow tm1g self : CLASS2 PERM2;
+  }
+}
+
+if (tun2b) {
+   allow tm1h self : CLASS2 PERM2;
+}
+

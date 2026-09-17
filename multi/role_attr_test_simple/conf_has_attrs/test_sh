@@ -1,0 +1,13 @@
+#!/usr/bin/bash
+
+PREFIX=/home/jwcart2/local
+
+export LD_LIBRARY_PATH=$PREFIX/lib:$PREFIX/usr/lib:${LD_LIBRARY_PATH}
+
+echo "checkpolicy: policy.conf"
+$PREFIX/usr/bin/checkpolicy -o policy.bin policy.conf
+
+$PREFIX/usr/bin/checkpolicy -F -b -o policy.bin.conf policy.bin
+
+mv *.bin tmp/
+mv *.bin.conf tmp/

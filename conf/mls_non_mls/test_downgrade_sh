@@ -1,0 +1,25 @@
+#!/usr/bin/bash
+
+PREFIX=~/local
+
+export LD_LIBRARY_PATH=$PREFIX/lib:$PREFIX/usr/lib:$PREFIX/usr/lib64:$PREFIX/usr/libexec:${LD_LIBRARY_PATH}
+
+TN=01
+TM=02
+V1=35
+V2=34
+
+
+echo "NON-MLS: test_$TN"
+$PREFIX/usr/bin/checkpolicy -c $V1 -o test_$TN.$V1.bin test_$TN.conf
+$PREFIX/usr/bin/checkpolicy -c $V2 -b -o test_$TN.$V2.bin test_$TN.$V1.bin
+mv test_$TN.$V1.bin tmp/
+mv test_$TN.$V2.bin tmp/
+
+echo "MLS: test_$TM"
+$PREFIX/usr/bin/checkpolicy -c $V1 -M -o test_$TM.$V1.bin test_$TM.conf
+$PREFIX/usr/bin/checkpolicy -c $V2 -b -M -o test_$TM.$V2.bin test_$TM.$V1.bin
+mv test_$TM.$V1.bin tmp/
+mv test_$TM.$V2.bin tmp/
+
+

@@ -1,0 +1,9 @@
+
+rm -f tmp/*.bin
+rm -f tmp/*.tree
+rm -f tmp/*.bin.conf
+rm -f tmp/*.bin.cil
+rm -f tmp/*.cil.conf
+rm -f tmp/*.mod
+rm -f tmp/*.pp
+rm -f tmp/*.lnk

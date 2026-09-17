@@ -1,0 +1,4 @@
+#!/usr/bin/sh
+
+rm -f tmp/*.bin
+rm -f tmp/*.bin.conf

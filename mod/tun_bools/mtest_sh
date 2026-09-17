@@ -1,0 +1,71 @@
+
+PREFIX=/home/jwcart2/local
+
+export LD_LIBRARY_PATH=${PREFIX}/lib:${PREFIX}/usr/lib:${PREFIX}/usr/lib64:${PREFIX}/usr/libexec:${LD_LIBRARY_PATH}
+
+
+for T in 01
+do
+	echo "checkmodule: mtest_base_$T.mod"
+	$PREFIX/usr/bin/checkmodule -M -o mtest_base_$T.mod mtest_base_$T.te
+
+	echo "checkmodule: mtest_mod1_$T.mod"
+	$PREFIX/usr/bin/checkmodule -M -m -o mtest_mod1_$T.mod mtest_mod1_$T.te
+
+	echo "checkmodule: mtest_mod2_$T.mod"
+	$PREFIX/usr/bin/checkmodule -M -m -o mtest_mod2_$T.mod mtest_mod2_$T.te
+
+	echo
+
+	echo "semodule_package: mtest_base_$T.pp"
+	$PREFIX/usr/bin/semodule_package -o mtest_base_$T.pp -m mtest_base_$T.mod
+
+	echo "semodule_package: mtest_mod1_$T.pp"
+	$PREFIX/usr/bin/semodule_package -o mtest_mod1_$T.pp -m mtest_mod1_$T.mod
+
+	echo "semodule_package: mtest_mod2_$T.pp"
+	$PREFIX/usr/bin/semodule_package -o mtest_mod2_$T.pp -m mtest_mod2_$T.mod
+
+	echo
+
+	echo "semodule_link: mtest_$T.lnk"
+	$PREFIX/usr/bin/semodule_link -o mtest_$T.lnk mtest_base_$T.pp mtest_mod1_$T.pp mtest_mod2_$T.pp
+
+	echo
+
+	echo "semodule_expand: mtest_$T.bin"
+	$PREFIX/usr/bin/semodule_expand -a mtest_$T.lnk mtest_$T.bin
+
+	echo
+
+	echo "checkpolicy: mtest_$T.bin.conf"
+	$PREFIX/usr/bin/checkpolicy -M -F -b -o mtest_$T.bin.conf mtest_$T.bin
+
+	echo
+	echo
+
+	echo "hll: mtest_base_$T.cil"
+	$PREFIX/usr/libexec/selinux/hll/pp mtest_base_$T.pp mtest_base_$T.cil
+
+	echo "hll: mtest_mod1_$T.cil"
+	$PREFIX/usr/libexec/selinux/hll/pp mtest_mod1_$T.pp mtest_mod1_$T.cil
+
+	echo "hll: mtest_mod2_$T.cil"
+	$PREFIX/usr/libexec/selinux/hll/pp mtest_mod2_$T.pp mtest_mod2_$T.cil
+
+	echo "secilc: mtest_$T.cil.bin"
+	$PREFIX/usr/bin/secilc -Q -M 1 -o mtest_$T.cil.bin mtest_base_$T.cil mtest_mod1_$T.cil mtest_mod2_$T.cil
+
+	echo
+
+	echo "checkpolicy: mtest_$T.cil.bin.conf"
+	$PREFIX/usr/bin/checkpolicy -M -F -b -o mtest_$T.cil.bin.conf mtest_$T.cil.bin
+
+	mv *.mod tmp
+	mv *.pp tmp
+	mv *.lnk tmp
+	mv *.bin tmp
+	mv *.cil tmp
+	mv *.bin.conf tmp
+	mv file_contexts tmp
+done

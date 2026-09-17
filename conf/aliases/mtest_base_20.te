@@ -1,0 +1,70 @@
+# Investigating type aliases
+
+class CLASS1
+class cl1
+class cl2
+class cl3
+
+sid kernel
+
+class CLASS1 { PERM1 }
+class cl1 { p1a p1b p1c p1d p1e }
+class cl2 { p2a p2b p2c p2d p2e }
+class cl3 { p3a p3b p3c p3d p3e }
+
+sensitivity SENS1;
+dominance { SENS1 }
+level SENS1;
+mlsconstrain CLASS1 { PERM1 } ((h1 dom h2) and (l1 domby h1));
+
+attribute at1;
+
+type TYPE1;
+type t1a;
+type t1b;
+type t1c;
+type t1d;
+
+typeattribute t1a at1;
+
+typealias t1a alias ta1a1;
+typealias t1b alias ta1a2;
+typealias t1c alias ta1a3;
+typealias ta1a1 alias ta1a4; # You can assign an alias to an alias
+typealias ta1a4 alias ta1a5;
+typealias ta1a4 alias ta1a6;
+#typealias ta1a6 alias ta1a1; # Duplicate delcaration not allowed
+#typealias at1 alias ta1a7; # cannot assign an alias to an attribute
+
+optional {
+  require {
+    type ta1a1;
+  }
+  allow ta1a1 t1d : cl1 p1a;
+}
+
+optional {
+  require {
+    type ta2a1;
+  }
+  allow ta2a1 t1d : cl1 p1b;
+}
+
+optional {
+  require {
+    type ta3a3;
+  }
+  typealias ta3a3 alias ta1a8;
+  allow ta1a8 t1d : cl1 p1b;
+}
+
+allow TYPE1 self : CLASS1 PERM1;
+allow at1 t1d : cl1 p1c;
+allow ta1a2 t1d : cl1 p1d;
+allow ta1a3 t1d : cl1 p1e;
+
+role ROLE1;
+role ROLE1 types TYPE1;
+user USER1 roles ROLE1 level SENS1 range SENS1;
+constrain cl1 { p1a } (t1 == at1);
+sid kernel USER1:ROLE1:TYPE1:SENS1

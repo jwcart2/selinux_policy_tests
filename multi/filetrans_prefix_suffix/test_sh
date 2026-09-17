@@ -1,0 +1,35 @@
+#!/usr/bin/bash
+
+PREFIX=~/local
+
+export LD_LIBRARY_PATH=$PREFIX/lib:$PREFIX/usr/lib:$PREFIX/usr/lib64:$PREFIX/usr/libexec:${LD_LIBRARY_PATH}
+
+$PREFIX/usr/bin/secil2tree -o test_01.cil.tree test_01.cil
+$prefix/usr/bin/secilc -o test_01.cil.bin test_01.cil
+$prefix/usr/bin/checkpolicy -F -b -o test_01.cil.bin.conf test_01.cil.bin
+$prefix/usr/bin/checkpolicy -C -b -o test_01.cil.bin.cil test_01.cil.bin
+
+$PREFIX/usr/bin/checkpolicy -o test_01.conf.bin test_01.conf
+$PREFIX/usr/bin/checkpolicy -C -b -o test_01.conf.bin.cil test_01.conf.bin
+
+$PREFIX/usr/bin/secil2conf -o test_01.cil.conf test_01.cil
+$PREFIX/usr/bin/checkpolicy -o test_01.cil.conf.bin test_01.cil.conf
+
+$PREFIX/usr/bin/checkmodule -o base_01.mod base_01.te
+$PREFIX/usr/bin/checkmodule -m -o mod_02.mod mod_02.te
+$PREFIX/usr/bin/semodule_package -o base_01.pp -m base_01.mod
+$PREFIX/usr/bin/semodule_package -o mod_02.pp -m mod_02.mod
+$PREFIX/usr/bin/semodule_link -o test_01.pp.lnk base_01.pp mod_02.pp
+$PREFIX/usr/bin/semodule_expand test_01.pp.lnk test_01.pp.bin
+
+$PREFIX/usr/bin/checkpolicy -F -b -o test_01.conf.bin.conf test_01.conf.bin
+$PREFIX/usr/bin/checkpolicy -F -b -o test_01.pp.bin.conf test_01.pp.bin
+
+mv *.bin tmp/
+mv *.tree tmp/
+mv *.bin.conf tmp/
+mv *.bin.cil tmp/
+mv *.cil.conf tmp/
+mv *.mod tmp/
+mv *.pp tmp/
+mv *.lnk tmp/

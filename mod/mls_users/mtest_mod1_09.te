@@ -1,0 +1,41 @@
+module mtest_mod1_09 1.0;
+
+# If module requires not met then there will be a link error
+require {
+	class CLASS1 { PERM1 };
+}
+
+TYPE TM1;
+type ts3;
+type ts4;
+type to3;
+type to4;
+
+allow TM1 self : CLASS1 PERM1;
+
+role rs3;
+role rs4;
+
+role rs3 types ts3;
+role rs4 types ts4;
+
+optional {
+  require {
+	type ts4;
+	type to4;
+  }
+  user us4 roles rs4;
+}
+
+optional {
+  require {
+    class CLASS1 { PERM1 };
+  }
+  type ts5;
+  type to5;
+  role rs5;
+  role rs5 types ts5;
+  user us5 roles rs5;
+}
+
+user us3 roles rs3;

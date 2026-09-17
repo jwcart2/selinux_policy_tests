@@ -1,0 +1,20 @@
+#!/usr/bin/sh
+
+PREFIX=/home/jwcart2/local
+#PREFIX=/home/jim/local
+
+OLD_LIBRARY_PATH=${LD_LIBRARY_PATH}
+export LD_LIBRARY_PATH=$PREFIX/lib:$PREFIX/usr/lib:${LD_LIBRARY_PATH}
+
+
+echo "secilc: policy.cil"
+$PREFIX/usr/bin/secilc -M 1 -o policy_cil.bin policy.cil
+
+echo "checkpolicy: policy_test_orig.conf"
+$PREFIX/usr/bin/checkpolicy -M -o policy_test_orig_conf.bin policy_test_orig.conf
+
+echo "checkpolicy: policy.conf"
+$PREFIX/usr/bin/checkpolicy -M -o policy_conf.bin policy.conf
+
+mv *.bin tmp/
+mv file_contexts tmp/

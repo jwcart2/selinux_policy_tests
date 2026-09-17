@@ -1,0 +1,62 @@
+# Investigating whether role attributes are processed correctly
+
+class CLASS1
+class cl1
+class cl2
+class cl3
+
+sid kernel
+
+class CLASS1 { PERM1 }
+class cl1 { p1 }
+class cl2 { p2 }
+class cl3 { p3 }
+
+sensitivity SENS1;
+dominance { SENS1 }
+level SENS1;
+mlsconstrain CLASS1 { PERM1 } ((h1 dom h2) and (l1 domby h1));
+
+type TYPE1;
+type t1a;
+type td1;
+
+allow TYPE1 self : CLASS1 PERM1;
+
+attribute_role ar1;
+
+role ROLE1;
+role r1a;
+role rn1;
+
+roleattribute r1a ar1;
+
+role ROLE1 types TYPE1;
+role ar1 types t1a;
+
+role_transition ar1 t1a : cl1 rn1;
+
+allow ar1 rn1;
+
+optional {
+  require {
+    attribute_role ar2;
+  }
+  role r2a;
+  roleattribute r2a ar2;
+}
+
+optional {
+  require {
+    attribute_role ar3;
+  }
+  role r3a;
+  roleattribute r3a ar3;
+}
+
+user USER1 roles ROLE1 level SENS1 range SENS1;
+user us1a roles ar1 level SENS1 range SENS1;
+
+constrain cl1 { p1 } (r1 == ar1);
+
+sid kernel USER1:ROLE1:TYPE1:SENS1

@@ -1,0 +1,6 @@
+(roleattributeset cil_gen_require system_r)
+(typeattributeset cil_gen_require corenet_unlabeled_type)
+(typeattributeset cil_gen_require unlabeled_t)
+(typeattributeset cil_gen_require domain)
+(allow corenet_unlabeled_type unlabeled_t (association (sendto recvfrom)))
+(allow domain unlabeled_t (packet (send recv)))

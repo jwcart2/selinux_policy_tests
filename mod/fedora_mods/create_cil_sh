@@ -1,0 +1,21 @@
+#!/usr/bin/sh
+
+PREFIX=/home/jwcart2/local
+
+export LD_LIBRARY_PATH=${PREFIX}/lib:${PREFIX}/usr/lib:${PREFIX}/usr/lib64:${PREFIX}/usr/libexec:${LD_LIBRARY_PATH}
+
+for m in modules/*.pp
+do
+  name=`basename $m .pp`
+  $PREFIX/usr/libexec/selinux/hll/pp modules/${name}.pp > new_modules/${name}.cil
+done
+
+#echo "semodule_link: test.lnk"
+#$PREFIX/usr/bin/semodule_link -o test.lnk base.pp modules/*.pp
+
+#echo "semodule_expand: test.bin"
+#$PREFIX/usr/bin/semodule_expand -a test.lnk test.bin
+
+#echo "checkpolicy: test.bin.conf"
+#$PREFIX/usr/bin/checkpolicy -M -F -b -o test.bin.conf test.bin
+

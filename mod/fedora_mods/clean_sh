@@ -1,0 +1,4 @@
+
+rm -f test.lnk
+rm -f test.bin
+rm -f test.bin.conf

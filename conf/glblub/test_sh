@@ -1,0 +1,100 @@
+#!/usr/bin/bash
+
+#VER=31
+PREFIX=~/local
+
+export LD_LIBRARY_PATH=$PREFIX/lib:$PREFIX/usr/lib:${LD_LIBRARY_PATH}
+
+#1. checkpolicy -M -C -o foo.cil foo.conf
+#   This converts conf to cil and tests module_to_cil.c.
+#
+#2. checkpolicy -M -C -b -o foo.cil foo.bin
+#   This converts kernel binary to cil and tests kernel_to_cil.c
+#
+#3. checkpolicy -M -F -b -o foo.conf foo.bin
+#   This converts kernel binary to conf and tests kernel_to_conf.c
+#
+#4. secil2conf -o foo.conf foo.cil
+#   This converts cil to conf and tests cil_policy.c
+
+echo "glbulb.conf to glbulb.conf.bin"
+$PREFIX/usr/bin/checkpolicy -M -o glbulb.conf.bin glbulb.conf
+
+
+
+echo "glbulb.conf.bin to glbulb.conf.bin.conf"
+$PREFIX/usr/bin/checkpolicy -M -F -b -o glbulb.conf.bin.conf glbulb.conf.bin
+
+echo "glbulb.conf.bin.conf to glbulb.conf.bin.conf.bin"
+$PREFIX/usr/bin/checkpolicy -M -o glbulb.conf.bin.conf.bin glbulb.conf.bin.conf
+
+echo "diff glbulb.conf.bin glbulb.conf.bin.conf.bin"
+D1=`diff glbulb.conf.bin glbulb.conf.bin.conf.bin | wc -l`
+if [ $D1 == 0 ]
+then
+    echo "No differences"
+else
+    echo "There were differences. See glbulb.conf.bin.conf.bin.sediff"
+    sediff glbulb.conf.bin glbulb.conf.bin.conf.bin > glbulb.conf.bin.conf.bin.sediff
+fi
+
+
+
+echo "glbulb.conf.bin to glbulb.conf.bin.cil"
+$PREFIX/usr/bin/checkpolicy -M -C -b -o glbulb.conf.bin.cil glbulb.conf.bin
+
+echo "glbulb.conf.bin.cil to glbulb.conf.bin.cil.bin"
+$PREFIX/usr/bin/secilc -M 1 -o glbulb.conf.bin.cil.bin glbulb.conf.bin.cil
+
+echo "diff glbulb.conf.bin glbulb.conf.bin.cil.bin"
+D1=`diff glbulb.conf.bin glbulb.conf.bin.cil.bin | wc -l`
+if [ $D1 == 0 ]
+then
+    echo "No differences"
+else
+    echo "There were differences. See glbulb.conf.bin.cil.bin.sediff"
+    sediff glbulb.conf.bin glbulb.conf.bin.cil.bin > glbulb.conf.bin.cil.bin.sediff
+fi
+
+
+
+echo "glbulb.conf to glbulb.conf.cil"
+$PREFIX/usr/bin/checkpolicy -M -C -o glbulb.conf.cil glbulb.conf
+
+echo "glbulb.conf.cil to glbulb.conf.cil.bin"
+$PREFIX/usr/bin/secilc -M 1 -o glbulb.conf.cil.bin glbulb.conf.cil
+
+echo "diff glbulb.conf.bin.cil.bin glbulb.conf.cil.bin"
+D1=`diff glbulb.conf.bin.cil.bin glbulb.conf.cil.bin | wc -l`
+if [ $D1 == 0 ]
+then
+    echo "No differences"
+else
+    echo "There were differences. See glbulb.conf.cil.bin.sediff"
+    sediff glbulb.conf.bin.cil.bin glbulb.conf.cil.bin > glbulb.conf.cil.bin.sediff
+fi
+
+
+
+echo "glbulb.conf.cil to glbulb.conf.cil.conf"
+$PREFIX/usr/bin/secil2conf -o glbulb.conf.cil.conf glbulb.conf.cil
+
+echo "glbulb.conf.cil.conf to glbulb.conf.cil.conf.bin"
+$PREFIX/usr/bin/checkpolicy -M -o glbulb.conf.cil.conf.bin glbulb.conf.cil.conf
+
+echo "diff glbulb.conf.bin glbulb.conf.cil.conf.bin"
+D1=`diff glbulb.conf.bin glbulb.conf.cil.conf.bin | wc -l`
+if [ $D1 == 0 ]
+then
+    echo "No differences"
+else
+    echo "There were differences. See glbulb.conf.cil.conf.bin.sediff"
+    sediff glbulb.conf.bin glbulb.conf.cil.conf.bin > glbulb.conf.cil.conf.bin.sediff
+fi
+
+mv *.sediff tmp/
+mv *.cil tmp/
+mv *.bin tmp/
+mv *.bin.conf tmp/
+mv *.cil.conf tmp/
+mv file_contexts tmp/

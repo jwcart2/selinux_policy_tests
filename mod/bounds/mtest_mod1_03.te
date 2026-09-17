@@ -1,0 +1,51 @@
+module mtest_mod1_03 1.0;
+
+require {
+	class cl2 { p2 };
+}
+
+type t1cx1a;
+type t1cx1c;
+type t2p;
+type t2c1;
+type td2;
+
+typebounds t2p t2c1;
+
+optional {
+  require {
+    type t1p;
+    type t1x; # Does not exist
+  }
+  type t1cx1b;
+  typebounds t1p t1cx1a;
+  typebounds t1p t1cx1b;
+}
+
+optional {
+  require {
+    type t1p;
+  }
+  type t1c1;
+  typebounds t1p t1c1;
+
+  optional {
+    require {
+	  type t1x; # Does not exist
+	}
+	type t1cx1d;
+  	typebounds t1p t1cx1c;
+  	typebounds t1p t1cx1d;
+  }
+}
+
+optional {
+  require {
+    type t3p;
+  }
+  type t3c1;
+  typebounds t3p t3c1;
+}
+
+allow td2 t2p : cl2 p2;
+allow td2 t2c1 : cl2 p2;

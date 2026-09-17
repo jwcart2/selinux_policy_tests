@@ -1,0 +1,5 @@
+
+rm -f tmp/*.mod
+rm -f tmp/*.pp
+rm -f tmp/*.bin
+rm -f tmp/*.bin.conf

@@ -1,0 +1,45 @@
+module mtest_mod2_20 1.0;
+
+require {
+	class cl3 { p3a p3b p3c p3d p3e };
+	#type ta1a1;
+}
+
+type t3a;
+type t3b;
+type t3c;
+type t3d;
+
+typealias t3a alias ta3a1;
+#typealias ta1a1 alias ta3a2;
+
+allow t3a t3d : cl3 p3a;
+#allow ta3a2 t3d : cl3 p3b;
+
+optional {
+  require {
+    type ta1a1;
+  }
+  typealias ta1a1 alias ta3a2;
+  allow ta3a2 t3d : cl3 p3b;
+}
+
+optional {
+  require {
+    type ta2a4;
+  }
+  typealias ta2a4 alias ta3a3;
+  # t1a [base] -> ta1a1 [base] -> ta2a4 [mod1] -> ta3a3 [mod2]
+  # Gives an error. It is unable to follow the chain
+  allow ta3a3 t3d : cl3 p3c;
+  #allow ta2a4 t3d : cl3 p3c;
+}
+
+optional {
+  require {
+    type ta1a2;
+  }
+  typealias ta1a2 alias ta3a4;
+  allow ta3a4 t3d : cl3 p3d;
+}
+ 

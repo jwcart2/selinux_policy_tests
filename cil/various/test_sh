@@ -1,0 +1,50 @@
+#!/usr/bin/bash
+
+PREFIX=~/local
+
+export LD_LIBRARY_PATH=$PREFIX/lib:$PREFIX/usr/lib:$PREFIX/usr/lib64:$PREFIX/usr/libexec:${LD_LIBRARY_PATH}
+
+echo ${LD_LIBRARY_PATH}
+
+rm -f new/*.bin
+rm -f new/*.bin.cil
+
+for T in 03
+do
+	echo "test_$T"
+	$PREFIX/usr/bin/secilc -c 30 -M 1 -t xen -o test_$T.bin test_$T.cil
+	$PREFIX/usr/bin/checkpolicy -M -C -b -o test_$T.bin.cil test_$T.bin
+	mv test_$T.bin new/
+	mv test_$T.bin.cil new/
+    DR=`diff orig/test_$T.bin new/test_$T.bin | wc -l`
+    if [ $DR != 0 ]
+    then
+		echo "orig/test_$T.bin and new/test_$T.bin are different"
+    fi
+	DR=`diff orig/test_$T.bin.cil new/test_$T.bin.cil | wc -l`
+	if [ $DR != 0 ]
+	then
+		echo "orig/test_$T.bin.cil and new/test_$T.bin.cil are different"
+	fi
+done
+
+for T in 01 02 04 05 06 07 08 10 11 12 13 14 15 16 17 18 19 20
+do
+	echo "test_$T"
+	$PREFIX/usr/bin/secilc -M 1 -o test_$T.bin test_$T.cil
+	$PREFIX/usr/bin/checkpolicy -M -C -b -o test_$T.bin.cil test_$T.bin
+	mv test_$T.bin new/
+	mv test_$T.bin.cil new/
+    DR=`diff orig/test_$T.bin new/test_$T.bin | wc -l`
+    if [ $DR != 0 ]
+    then
+		echo "orig/test_$T.bin and new/test_$T.bin are different"
+    fi
+	DR=`diff orig/test_$T.bin.cil new/test_$T.bin.cil | wc -l`
+	if [ $DR != 0 ]
+	then
+		echo "orig/test_$T.bin.cil and new/test_$T.bin.cil are different"
+	fi
+done
+
+rm -f file_contexts

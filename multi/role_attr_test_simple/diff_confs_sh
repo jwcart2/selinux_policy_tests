@@ -1,0 +1,7 @@
+#!/usr/bin/bash
+
+diff -u conf_has_attrs/tmp/policy.bin.conf only_base_has_attrs/tmp/policy_mod.bin.conf > conf_base.diff
+
+diff -u modules_have_attrs/tmp/policy_mod.bin.conf only_base_has_attrs/tmp/policy_mod.bin.conf > mod_base.diff
+
+diff -u conf_has_attrs/tmp/policy.bin.conf modules_have_attrs/tmp/policy_mod.bin.conf > conf_mod.diff

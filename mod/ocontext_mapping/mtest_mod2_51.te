@@ -1,0 +1,22 @@
+module mtest_mod2_51 1.0;
+
+require {
+  type TYPE1;
+}
+
+TYPE TM2;
+
+optional {
+  require {
+    class CLASS1 { PERM1 };
+  }
+  allow TM2 self : CLASS1 PERM1;
+}
+
+optional {
+  require {
+    type TM2;
+  }
+  role RM2;
+  role RM2 types TM2;
+}

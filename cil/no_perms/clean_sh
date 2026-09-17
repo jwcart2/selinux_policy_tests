@@ -1,0 +1,5 @@
+
+rm tmp/*.bin
+rm tmp/*.bin.cil
+rm tmp/*.cil.conf
+rm tmp/file_contexts

@@ -1,0 +1,4 @@
+
+rm -f tmp/*.bin
+rm -f tmp/*.tree
+rm -f tmp/file_contexts

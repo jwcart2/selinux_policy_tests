@@ -1,0 +1,176 @@
+# Investigating whether role attribute in role attributes are processed correctly
+
+class CLASS1
+class cl1
+class cl2
+class cl3
+
+sid kernel
+
+class CLASS1 { PERM1 }
+class cl1 { p1 }
+class cl2 { p2 }
+class cl3 { p3 }
+
+sensitivity SENS1;
+dominance { SENS1 }
+level SENS1;
+mlsconstrain CLASS1 { PERM1 } ((h1 dom h2) and (l1 domby h1));
+
+type TYPE1;
+type t1_;
+type t1a;
+type t4a;
+type t5a;
+type t6a;
+type t7a;
+type t8a;
+type td1;
+
+allow TYPE1 self : CLASS1 PERM1;
+
+attribute_role ar1;
+attribute_role ar1a;
+attribute_role ar4a;
+attribute_role ar5a;
+attribute_role ar6a;
+attribute_role ar7a;
+attribute_role ar8a;
+attribute_role arL1;
+attribute_role arL2;
+attribute_role arL3;
+
+role ROLE1;
+role r1a;
+role r4a;
+role r5a;
+role r6a;
+role r7a;
+role r8a;
+role rn1;
+role rn1a;
+role rn4a;
+role rn5a;
+role rn6a;
+role rn7a;
+role rn8a;
+
+roleattribute r1a ar1a;
+roleattribute ar1a ar1;
+roleattribute r4a ar4a;
+roleattribute r5a ar5a;
+roleattribute r6a ar6a;
+roleattribute r7a ar7a;
+roleattribute r8a ar8a;
+roleattribute ROLE1 arL1;
+roleattribute arL1 arL2;
+roleattribute arL2 arL3;
+#roleattribute arL3 arL1; # Loop
+
+role ROLE1 types TYPE1;
+role ar1 types t1_;
+role ar1a types t1a;
+role ar4a types t4a;
+role ar5a types t5a;
+role ar6a types t6a;
+role ar7a types t7a;
+role ar8a types t8a;
+
+role_transition ar1 t1_ : cl1 rn1;
+role_transition ar1a t1a : cl1 rn1a;
+role_transition ar4a t4a : cl1 rn4a;
+role_transition ar5a t5a : cl1 rn5a;
+role_transition ar6a t6a : cl1 rn6a;
+role_transition ar7a t7a : cl1 rn7a;
+role_transition ar8a t8a : cl1 rn8a;
+
+allow ar1 rn1;
+allow ar1a rn1a;
+allow ar4a rn4a;
+allow ar5a rn5a;
+allow ar6a rn6a;
+allow ar7a rn7a;
+allow ar8a rn8a;
+
+optional {
+  require {
+    attribute_role ar2;
+	attribute_role ar2b;
+  }
+  type t2a;
+  attribute_role ar2a;
+  role r2a;
+  role rn2a;
+  role r2ba;
+  roleattribute r2a ar2a;
+  roleattribute ar2a ar2;
+  roleattribute r2ba ar2b;
+  role ar2a types t2a;
+  role_transition ar2a t2a : cl1 rn2a;
+  allow ar2a rn2a;
+}
+
+optional {
+  require {
+    attribute_role ar3;
+    attribute_role ar3a;
+	attribute_role ar3c;
+  }
+  type t3a;
+  role r3a;
+  role r3ca;
+  role rn3a;
+  roleattribute r3a ar3a;
+  roleattribute ar3a ar3;
+  roleattribute r3ca ar3c;
+  role ar3a types t3a;
+  role_transition ar3a t3a : cl1 rn3a;
+  allow ar3a rn3a;
+}
+
+optional {
+  require {
+    attribute_role ar5c;
+    role r5b;
+  }
+  roleattribute r5b ar5c;
+}
+
+optional {
+  require {
+    type t6XXX;
+    attribute_role ar6c;
+    role r6b;
+  }
+  roleattribute r6b ar6c;
+  role ar6c types t6XXX;
+}
+
+optional {
+  require {
+    attribute_role ar7c;
+    role r7b;
+  }
+  roleattribute r7b ar7c;
+}
+
+optional {
+  require {
+    attribute_role ar8c;
+    role r8b;
+  }
+  roleattribute r8b ar8c;
+}
+
+user USER1 roles ROLE1 level SENS1 range SENS1;
+user us1 roles ar1 level SENS1 range SENS1;
+user us1a roles ar1a level SENS1 range SENS1;
+user us4a roles ar4a level SENS1 range SENS1;
+user us5a roles ar5a level SENS1 range SENS1;
+user us6a roles ar6a level SENS1 range SENS1;
+user us7a roles ar7a level SENS1 range SENS1;
+user us8a roles ar8a level SENS1 range SENS1;
+
+constrain cl1 { p1 } (r1 == ar1);
+
+sid kernel USER1:ROLE1:TYPE1:SENS1

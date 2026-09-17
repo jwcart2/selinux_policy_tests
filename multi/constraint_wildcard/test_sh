@@ -1,0 +1,36 @@
+#!/usr/bin/sh
+
+PREFIX=/home/jwcart2/local
+
+OLD_LIBRARY_PATH=${LD_LIBRARY_PATH}
+export LD_LIBRARY_PATH=$PREFIX/lib:$PREFIX/usr/lib:${LD_LIBRARY_PATH}
+
+
+#rm policy_mod.lnk policy_mod.bin
+#rm base_1.mod base_1.pp
+#rm mod_2.mod mod_2.pp
+#rm mod_3.mod mod_3.pp
+
+
+echo "checkpolicy: policy_01.conf"
+$PREFIX/usr/bin/checkpolicy -M -o policy_01_conf.bin policy_01.conf
+
+echo "checkpolicy: policy_02.conf"
+$PREFIX/usr/bin/checkpolicy -M -o policy_02_conf.bin policy_02.conf
+
+echo "secilc: policy_01.cil"
+$PREFIX/usr/bin/secilc -M 1 -o policy_01_cil.bin policy_01.cil
+
+echo "secilc: policy_02.cil"
+$PREFIX/usr/bin/secilc -M 1 -o policy_02_cil.bin policy_02.cil
+
+echo "checkpolicy: policy_02_conf.bin"
+$PREFIX/usr/bin/checkpolicy -F -b -M -o policy_02_conf_bin.conf policy_02_conf.bin
+
+echo "checkpolicy: policy_02_cil.bin"
+$PREFIX/usr/bin/checkpolicy -C -b -M -o policy_02_cil_bin.cil policy_02_cil.bin
+
+mv *.bin tmp/
+mv *bin.conf tmp/
+mv *bin.cil tmp/
+mv file_contexts tmp/

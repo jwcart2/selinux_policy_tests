@@ -1,0 +1,10 @@
+module mtest_mod1_04 1.0;
+
+# If module requires not met then there will be a link error
+require {
+	class CLASS1 { PERM1 };
+}
+
+TYPE TM1;
+
+allow TM1 self : CLASS1 PERM1;

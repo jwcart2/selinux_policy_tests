@@ -1,0 +1,122 @@
+# Investigating scope decl issue
+
+class CLASS1
+class cl1
+class cl2
+class cl3
+class cl4
+class cl5
+class cl6
+class cl7
+class cl8
+class cl9
+
+sid kernel
+
+common cm01 { cp1a cp1b cp1c }
+common cm02 { cp2a cp2b cp2c cp2d }
+class CLASS1 { PERM1 }
+class cl1 inherits cm01 { p1a }
+class cl2 inherits cm02 { p2a p2b }
+class cl3 inherits cm01 { p3a p3b p3c }
+class cl4 inherits cm02 { p4a p4b p4c p4d }
+class cl5 inherits cm01 { p5a p5b p5c p5d p5e }
+class cl6 inherits cm02 { p6a p6b p6c p6d }
+class cl7 inherits cm01 { p7a p7b p7c }
+class cl8 inherits cm02 { p8a p8b }
+class cl9 inherits cm01 { p9a }
+
+sensitivity SENS1;
+dominance { SENS1 }
+level SENS1;
+mlsconstrain CLASS1 { PERM1 } ((h1 dom h2) and (l1 domby h1));
+
+bool bool1a false;
+bool bool1b true;
+
+type TYPE1;
+type t1a;
+type t1b;
+type t1c;
+type t1d;
+type t1e;
+type t1r;
+type t1x;
+type t1z;
+
+optional {
+  require {
+    class cl1 { cp1a p1a };
+  }
+  allow t1a self : CLASS1 { PERM1 };
+  allow t1a self : cl1 { p1a cp1a };
+}
+
+optional {
+  require {
+    class cl2 { cp2a cp2d p2a p2b };
+  }
+  allow t1b self : cl2 { p2a cp2d p2b cp2a };
+}
+
+optional {
+  require {
+    class cl3 { p3c cp1c cp1b };
+    class cl4 { cp2c p4d cp2a };
+  }
+  allow t1c self : cl3 { cp1b cp1c p3c };
+  allow t1c self : cl4 { p4d cp2c cp2a };
+}
+
+optional {
+  require {
+    class cl5 { p5c cp1b p5e p5a p5b cp1a p5d cp1c };
+  }
+  allow t1d self : cl5 { cp1a p5a p5b p5c p5d p5e cp1c cp1b };
+}
+
+optional {
+  require {
+    type t1a;
+  }
+  allow t1a t1x : CLASS1 PERM1;
+}
+
+optional {
+  require {
+    type t1z;
+  }
+  role r1z;
+  role r1z types t1z;
+}
+
+if (bool1a) {
+  allow t1b t1x : CLASS1 PERM1;
+} else {
+  allow t1c t1x : CLASS1 PERM1;
+}
+
+if (bool1b) {
+  allow t1d t1x : CLASS1 PERM1;
+} else {
+  allow t1e t1x : CLASS1 PERM1;
+}
+
+allow TYPE1 self : CLASS1 PERM1;
+
+role ROLE1;
+role r1a;
+role r1b;
+
+role ROLE1 types TYPE1;
+role r1a types t1r;
+role r1b types t1r;
+
+allow r1a r1b;
+role_transition r1a t1r:CLASS1 r1b;
+
+user USER1 roles ROLE1 level SENS1 range SENS1;
+
+constrain cl1 { p1a } (t1 == t2);
+
+sid kernel USER1:ROLE1:TYPE1:SENS1

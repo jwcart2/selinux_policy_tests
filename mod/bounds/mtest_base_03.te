@@ -1,0 +1,53 @@
+# Investigating whether type_bounds statements are handled correctly
+
+class CLASS1
+class cl1
+class cl2
+class cl3
+
+sid kernel
+
+class CLASS1 { PERM1 }
+class cl1 { p1 }
+class cl2 { p2 }
+class cl3 { p3 }
+
+sensitivity SENS1;
+dominance { SENS1 }
+level SENS1;
+mlsconstrain CLASS1 { PERM1 } ((h1 dom h2) and (l1 domby h1));
+
+type TYPE1;
+type t1p;
+type t1cb;
+type td1;
+
+typebounds t1p t1cb;
+
+optional {
+  require {
+    type t2p;
+  }
+  type t2cb;
+  typebounds t2p t2cb;
+}
+
+optional {
+  require {
+    type t3p;
+  }
+  type t3cb;
+  typebounds t3p t3cb;
+}
+
+allow TYPE1 self : CLASS1 PERM1;
+allow td1 t1p : cl1 p1;
+allow td1 t1cb : cl1 p1;
+
+role ROLE1;
+
+role ROLE1 types TYPE1;
+
+user USER1 roles ROLE1 level SENS1 range SENS1;
+
+sid kernel USER1:ROLE1:TYPE1:SENS1

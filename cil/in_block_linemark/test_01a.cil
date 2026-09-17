@@ -1,0 +1,36 @@
+
+(in b0
+    (allow tBAD self (CLASS (PERMBAD)))
+)
+
+(in b3.ba
+    (allow tBAD self (CLASS (PERMBAD)))
+)
+
+(in b4a
+    (allow tBAD self (CLASS (PERMBAD)))
+)
+
+(in option7
+    (type o7_tb)
+)
+(in option7
+    (allow t7 o7_ta (CLASS (PERM2)))
+    (allow t7 o7_tb (CLASS (PERM2)))
+    (allow tBAD self (CLASS (PERMBAD)))
+)
+
+(in b15
+    (type b15_tb) ;; b15.b15_tb
+    (allow tBAD self (CLASS (PERMBAD)))
+)
+
+(in b15
+    (allow b15_ta self (CLASS (PERM1)))
+    (allow b15.b15_ta self (CLASS (PERM2)))
+    (allow .b15.b15_ta self (CLASS (PERM3)))
+
+    (allow b15_tb self (CLASS (PERM1)))
+    (allow b15.b15_tb self (CLASS (PERM2)))
+    (allow .b15.b15_tb self (CLASS (PERM3)))
+)

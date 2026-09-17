@@ -1,0 +1,48 @@
+module mtest_mod2_08 1.0;
+
+# If module requires not met then there will be a link error
+require {
+	class CLASS1 { PERM1 };
+	sensitivity s6;
+	sensitivity s9;
+}
+
+TYPE TM2;
+type ts6;
+type ts7;
+type to6;
+type to7;
+
+allow TM2 self : CLASS1 PERM1;
+
+range_transition ts6 to6 : CLASS1 s6 - s9;
+
+role rs6;
+role rs7;
+
+role rs6 types ts6;
+role rs7 types ts7;
+
+optional {
+  require {
+	type ts7;
+	type to7;
+	sensitivity s7;
+  }
+  range_transition ts7 to7 : CLASS1 s7 - s9;
+  user us7 roles rs7 level s7 range s7 - s9;
+}
+
+optional {
+  require {
+	sensitivity s8;
+  }
+  type ts8;
+  type to8;
+  role rs8;
+  role rs8 types ts8;
+  range_transition ts8 to8 : CLASS1 s8 - s9;
+  user us8 roles rs8 level s8 range s8 - s9;
+}
+
+user us6 roles rs6 level s6 range s6 - s9;

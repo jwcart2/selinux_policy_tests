@@ -1,0 +1,32 @@
+module mtest_mod2_06 1.0;
+
+require {
+	class cl3 { p3 };
+	attribute_role ar1;
+	attribute_role ar2;
+	sensitivity SENS1;
+}
+
+type t3c;
+type td3;
+
+allow td3 t3c : cl3 p3;
+
+attribute_role ar3;
+
+role r1c;
+role r2c;
+role r3c;
+role rn3;
+
+roleattribute r1c ar1;
+roleattribute r2c ar2;
+roleattribute r3c ar3;
+
+role ar3 types t3c;
+
+role_transition ar3 t3c : cl3 rn3;
+
+allow ar3 rn3;
+
+user us3c roles ar3 level SENS1 range SENS1;

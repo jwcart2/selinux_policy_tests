@@ -1,0 +1,78 @@
+# Investigating scope decl issue
+
+class CLASS1
+class cl1
+class cl2
+class cl3
+class cl4
+class cl5
+class cl6
+class cl7
+class cl8
+class cl9
+
+sid kernel
+
+class CLASS1 { PERM1 }
+class cl1 { p1a }
+class cl2 { p2a p2b }
+class cl3 { p3a p3b p3c }
+class cl4 { p4a p4b p4c p4d }
+class cl5 { p5a p5b p5c p5d p5e }
+class cl6 { p6a p6b p6c p6d }
+class cl7 { p7a p7b p7c }
+class cl8 { p8a p8b }
+class cl9 { p9a }
+
+sensitivity SENS1;
+dominance { SENS1 }
+level SENS1;
+mlsconstrain CLASS1 { PERM1 } ((h1 dom h2) and (l1 domby h1));
+
+type TYPE1;
+type t1a;
+type t1b;
+type t1c;
+type t1d;
+
+optional {
+  require {
+    class cl1 { p1a };
+  }
+  allow t1a self : cl1 p1a;
+}
+
+optional {
+  require {
+    class cl2 { p2a p2b };
+  }
+  allow t1b self : cl2 { p2a p2b };
+}
+
+optional {
+  require {
+    class cl3 { p3c };
+    class cl4 { p4d };
+  }
+  allow t1c self : cl3 p3c;
+  allow t1c self : cl4 p4d;
+}
+
+optional {
+  require {
+    class cl5 { p5a p5b p5c p5d p5e };
+  }
+  allow t1d self : cl5 { p5a p5b p5c p5d p5e };
+}
+
+allow TYPE1 self : CLASS1 PERM1;
+
+role ROLE1;
+
+role ROLE1 types TYPE1;
+
+user USER1 roles ROLE1 level SENS1 range SENS1;
+
+constrain cl1 { p1a } (t1 == t2);
+
+sid kernel USER1:ROLE1:TYPE1:SENS1

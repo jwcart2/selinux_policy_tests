@@ -1,0 +1,29 @@
+PREFIX=/home/jwcart2/local
+
+export LD_LIBRARY_PATH=$PREFIX/lib:$PREFIX/usr/lib:${LD_LIBRARY_PATH}
+
+
+echo "secilc"
+$PREFIX/usr/bin/secilc -M 1 -o test.cil.bin test.cil
+echo "secil2conf"
+$PREFIX/usr/bin/secil2conf -M 1 -o test.cil.conf test.cil
+echo "checkpolicy -C -b"
+$PREFIX/usr/bin/checkpolicy -M -C -b -o test.cil.bin.cil test.cil.bin
+
+echo "secil2tree"
+$PREFIX/usr/bin/secil2tree -A build -o test.cil.tree test.cil
+
+echo "checkpolicy"
+$PREFIX/usr/bin/checkpolicy -M -o test.conf.bin test.conf
+echo "checkpolicy -C"
+$PREFIX/usr/bin/checkpolicy -M -C -o test.conf.cil test.conf
+echo "checkpolicy -F -b"
+$PREFIX/usr/bin/checkpolicy -M -F -b -o test.conf.bin.conf test.conf.bin
+
+mv *.bin tmp/
+mv *.cil.conf tmp/
+mv *.bin.cil tmp/
+mv *.cil.tree tmp/
+mv *.conf.cil tmp/
+mv *.bin.conf tmp/
+mv file_contexts tmp/

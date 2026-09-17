@@ -1,0 +1,98 @@
+module mtest_mod2_10 1.0;
+
+# If module requires not met then there will be a link error
+require {
+	class CLASS1 { PERM1A PERM1B PERM1C };
+	class CLASS2 { PERM2A PERM2B PERM2C };
+	class CLASS3 { PERM3A PERM3B PERM3C };
+}
+
+TYPE TYPE3;
+type ts3;
+type to3;
+
+allow TYPE3 self : CLASS3 PERM3A;
+
+optional {
+  require {
+    type ts1;
+  }
+  allow ts1 to3 : CLASS1 PERM1A;
+  optional {
+    require {
+	  type ts2;
+    }
+    allow ts1 to3 : CLASS1 PERM1B;
+    allow ts2 to3 : CLASS1 PERM1B;
+    optional {
+      require {
+	    type ts3;
+      }
+      allow ts1 to3 : CLASS1 PERM1C;
+      allow ts2 to3 : CLASS1 PERM1C;
+      allow ts3 to3 : CLASS1 PERM1C;
+    }
+  }
+}
+
+optional {
+  require {
+    type TYPE3;
+  }
+  allow TYPE3 self : CLASS3 PERM3B;
+}
+
+optional {
+  require {
+    type ts2;
+  }
+  allow ts2 to3 : CLASS2 PERM2A;
+}
+
+optional {
+  require {
+    type ts2;
+  }
+  allow ts2 to3 : CLASS2 PERM2B;
+}
+
+optional {
+  require {
+    type ts2;
+  }
+  allow ts2 to3 : CLASS2 PERM2C;
+}
+
+optional {
+  require {
+    type TYPE3;
+  }
+  allow TYPE3 self : CLASS3 PERM3C;
+}
+
+optional {
+  require {
+    type ts1;
+    type ts2;
+    type ts3;
+  }
+  allow ts1 to3 : CLASS3 PERM3A;
+  allow ts2 to3 : CLASS3 PERM3A;
+  allow ts3 to3 : CLASS3 PERM3A;
+}
+
+optional {
+  require {
+    type ts2;
+    type ts3;
+  }
+  allow ts2 to3 : CLASS3 PERM3B;
+  allow ts3 to3 : CLASS3 PERM3B;
+}
+
+optional {
+  require {
+    type ts3;
+  }
+  allow ts3 to3 : CLASS3 PERM3C;
+}

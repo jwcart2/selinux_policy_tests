@@ -1,0 +1,64 @@
+# Investigating type aliases
+
+class CLASS1
+class cl1
+class cl2
+class cl3
+class cl4
+
+sid kernel
+
+class CLASS1 { PERM1 }
+class cl1 { p1a p1b p1c p1d p1e p1f p1g p1h p1i }
+class cl2 { p2a p2b p2c p2d p2e p2f p2g p2h p2i }
+class cl3 { p3a p3b p3c p3d p3e p3f p3g p3h p3i }
+class cl4 { p4a p4b p4c p4d p4e p4f p4g p4h p4i }
+
+sensitivity SENS1;
+dominance { SENS1 }
+level SENS1;
+mlsconstrain CLASS1 { PERM1 } ((h1 dom h2) and (l1 domby h1));
+
+attribute at1;
+
+type TYPE1;
+type t1x;
+
+optional {
+  require {
+    type ta4a;
+  }
+  typealias ta4a alias ta1a;
+  allow ta1a t1x : cl1 p1a;
+}
+
+optional {
+  require {
+    type ta4b;
+  }
+  typealias ta4b alias ta1b;
+  allow ta1b t1x : cl1 p1b;
+}
+
+optional {
+  require {
+    type ta4c;
+  }
+  typealias ta4c alias ta1c;
+  allow ta1c t1x : cl1 p1c;
+}
+
+optional {
+  require {
+    type ta4d;
+  }
+  typealias ta4d alias ta1d;
+  allow ta1d t1x : cl1 p1d;
+}
+
+
+role ROLE1;
+role ROLE1 types TYPE1;
+user USER1 roles ROLE1 level SENS1 range SENS1;
+constrain cl1 { p1a } (t1 == at1);
+sid kernel USER1:ROLE1:TYPE1:SENS1

@@ -1,0 +1,100 @@
+module mod_3 0.0.1;
+
+require {
+	class CLASS3 PERM3A;
+	role ROLE3A, ROLE3P;
+	attribute_role ROLE_ATTR3A, ROLE_ATTR23B, ROLE_ATTR123A;
+}
+
+attribute TYPE_ATTR3BC;
+
+type TYPE3;
+type TYPE3A;
+type TYPE3B;
+type TYPE3C;
+type TYPE3BC;
+type TYPE3T;
+
+typeattribute TYPE3B TYPE_ATTR3BC;
+typeattribute TYPE3C TYPE_ATTR3BC;
+
+allow TYPE3 self : CLASS3 PERM3A;
+
+attribute_role ROLE_ATTR3B;
+attribute_role ROLE_ATTR3C;
+attribute_role ROLE_ATTR3BC;
+
+role ROLE3;
+role ROLE3B;
+role ROLE3C;
+role ROLE3BC;
+role ROLE3T;
+
+roleattribute ROLE3B ROLE_ATTR3B;
+roleattribute ROLE3C ROLE_ATTR3C;
+roleattribute ROLE_ATTR3A ROLE_ATTR123A;
+roleattribute ROLE_ATTR3B ROLE_ATTR23B;
+roleattribute ROLE_ATTR3B ROLE_ATTR3BC;
+roleattribute ROLE_ATTR3C ROLE_ATTR3BC;
+
+role ROLE3 types TYPE3;
+role ROLE_ATTR3A types TYPE3A;
+role ROLE_ATTR3BC types TYPE_ATTR3BC;
+
+allow ROLE_ATTR3A ROLE3T;
+allow ROLE3T ROLE_ATTR3A;
+allow ROLE_ATTR3BC ROLE3BC;
+allow ROLE3BC ROLE_ATTR3BC;
+
+role_transition ROLE_ATTR3A TYPE3A:CLASS3 ROLE3T;
+role_transition ROLE_ATTR3BC TYPE3BC:CLASS3 ROLE3T;
+
+optional {
+		 require {
+		 		 class CLASS3 PERM3A;
+				 role ROLE3P, ROLE3T;
+				 attribute_role ROLE_ATTR123P, ROLE_ATTR23P;
+				 }
+		 type TYPE3P;
+		 attribute_role ROLE_ATTR3P;
+		 role ROLE3P;
+		 roleattribute ROLE3P ROLE_ATTR3P;
+		 roleattribute ROLE_ATTR3P ROLE_ATTR123P;
+		 roleattribute ROLE_ATTR3P ROLE_ATTR23P;
+		 role ROLE_ATTR3P types TYPE3P;
+		 allow ROLE_ATTR3P ROLE3T;
+		 allow ROLE3T ROLE_ATTR3P;
+		 role_transition ROLE_ATTR3P TYPE3P:CLASS3 ROLE3T;
+}
+
+optional {
+		 require {
+		 		 class CLASS3 PERM3A;
+		 		 type TYPE1X, TYPE2X, TYPE3X, NO_TYPE;
+				 role ROLE1X, ROLE2X, ROLE3T;
+				 attribute_role ROLE_ATTR123A, ROLE_ATTR123P;
+				 }
+		 type TYPE3X;
+		 allow NO_TYPE self:CLASS3 PERM3A;
+		 attribute_role ROLE_ATTR3X;
+		 role ROLE3X;
+		 roleattribute ROLE3X ROLE_ATTR3X;
+		 roleattribute ROLE_ATTR3X ROLE_ATTR123A;
+		 roleattribute ROLE_ATTR3X ROLE_ATTR123P;
+		 role ROLE_ATTR3X types TYPE3X;
+		 role ROLE_ATTR123A types TYPE2X;
+		 role ROLE_ATTR123P types TYPE1X;
+		 allow ROLE_ATTR3X ROLE3T;
+		 allow ROLE3T ROLE_ATTR3X;
+		 allow ROLE_ATTR123A ROLE2X;
+		 allow ROLE2X ROLE_ATTR123A;
+		 allow ROLE_ATTR123P ROLE1X;
+		 allow ROLE1X ROLE_ATTR123P;
+		 role_transition ROLE_ATTR3X TYPE3X:CLASS3 ROLE3T;
+		 role_transition ROLE_ATTR123A TYPE3X:CLASS3 ROLE3X;
+		 role_transition ROLE_ATTR123P TYPE3X:CLASS3 ROLE3X;
+		 user USER3X1 roles ROLE_ATTR123A;
+		 user USER3X2 roles ROLE_ATTR123P;
+}
+
+user USER3BC roles ROLE_ATTR3BC;

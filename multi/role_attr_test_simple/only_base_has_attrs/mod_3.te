@@ -1,0 +1,120 @@
+module mod_3 0.0.1;
+
+require {
+	class CLASS1 PERM1A;
+	class CLASS2 PERM2A;
+	class CLASS3 PERM3A;
+	role ROLE1A, ROLE2A, ROLE3A, ROLE3P, ROLE23B, ROLE123A;
+	type TYPE23B, TYPE123A;
+}
+
+attribute TYPE_ATTR3BC;
+
+type TYPE3;
+type TYPE3A;
+type TYPE3B;
+type TYPE3C;
+type TYPE3BC;
+type TYPE3T;
+
+typeattribute TYPE3B TYPE_ATTR3BC;
+typeattribute TYPE3C TYPE_ATTR3BC;
+
+allow TYPE3 self : CLASS3 PERM3A;
+
+role ROLE3;
+role ROLE3B;
+role ROLE3C;
+role ROLE3BC;
+role ROLE3T;
+
+role ROLE3 types TYPE3;
+role ROLE3A types TYPE3A;
+role ROLE3B types TYPE_ATTR3BC;
+role ROLE3C types TYPE_ATTR3BC;
+role ROLE3A types TYPE123A;
+role ROLE3B types TYPE23B;
+
+allow ROLE3A ROLE3T;
+allow ROLE3T ROLE3A;
+allow ROLE3B ROLE3BC;
+allow ROLE3BC ROLE3B;
+allow ROLE3C ROLE3BC;
+allow ROLE3BC ROLE3C;
+allow ROLE3B ROLE23B;
+allow ROLE23B ROLE3B;
+allow ROLE3A ROLE123A;
+allow ROLE123A ROLE3A;
+
+role_transition ROLE3A TYPE3A:CLASS3 ROLE3T;
+role_transition ROLE3B TYPE3BC:CLASS3 ROLE3T;
+role_transition ROLE3C TYPE3BC:CLASS3 ROLE3T;
+role_transition ROLE3B TYPE23B:CLASS2 ROLE23B;
+role_transition ROLE3A TYPE123A:CLASS1 ROLE123A;
+
+optional {
+		 require {
+		 		 class CLASS1 PERM1A;
+				 class CLASS2 PERM2A;
+				 class CLASS3 PERM3A;
+				 role ROLE3P, ROLE3T, ROLE23P, ROLE123P;
+				 type TYPE23P, TYPE123P;
+				 }
+		 type TYPE3P;
+		 role ROLE3P;
+		 role ROLE3P types TYPE3P;
+		 role ROLE3P types TYPE23P;
+		 allow ROLE3P ROLE3T;
+		 allow ROLE3T ROLE3P;
+		 allow ROLE3P ROLE23P;
+		 allow ROLE23P ROLE3P;
+		 allow ROLE3P ROLE123P;
+		 allow ROLE123P ROLE3P;
+		 role_transition ROLE3P TYPE3P:CLASS3 ROLE3T;
+		 role_transition ROLE3P TYPE23P:CLASS2 ROLE23P;
+		 role_transition ROLE3P TYPE123P:CLASS1 ROLE123P;
+}
+
+optional {
+		 require {
+		 		 class CLASS3 PERM3A;
+		 		 type TYPE1X, TYPE2X, TYPE3X, NO_TYPE;
+				 role ROLE1P, ROLE1X, ROLE2P, ROLE2X, ROLE3T;
+				 attribute_role ROLE_ATTR123A, ROLE_ATTR123P;
+				 }
+		 type TYPE3X;
+		 allow NO_TYPE self:CLASS3 PERM3A;
+		 role ROLE3X;
+		 role ROLE3X types TYPE3X;
+		 role ROLE1A types TYPE2X;
+		 role ROLE2A types TYPE2X;
+		 role ROLE3A types TYPE2X;
+		 role ROLE1P types TYPE1X;
+		 role ROLE2P types TYPE1X;
+		 role ROLE3P types TYPE1X;
+		 allow ROLE3X ROLE3T;
+		 allow ROLE3T ROLE3X;
+		 allow ROLE1A ROLE2X;
+		 allow ROLE2A ROLE2X;
+		 allow ROLE3A ROLE2X;
+		 allow ROLE2X ROLE1A;
+		 allow ROLE2X ROLE2A;
+		 allow ROLE2X ROLE3A;
+		 allow ROLE1P ROLE1X;
+		 allow ROLE2P ROLE1X;
+		 allow ROLE3P ROLE1X;
+		 allow ROLE1X ROLE1P;
+		 allow ROLE1X ROLE2P;
+		 allow ROLE1X ROLE3P;
+		 role_transition ROLE3X TYPE3X:CLASS3 ROLE3T;
+		 role_transition ROLE1A TYPE3X:CLASS3 ROLE3T;
+		 role_transition ROLE2A TYPE3X:CLASS3 ROLE3T;
+		 role_transition ROLE3A TYPE3X:CLASS3 ROLE3T;
+		 role_transition ROLE1P TYPE3X:CLASS3 ROLE3T;
+		 role_transition ROLE2P TYPE3X:CLASS3 ROLE3T;
+		 role_transition ROLE3P TYPE3X:CLASS3 ROLE3T;
+		 user USER3X1 roles { ROLE1A ROLE2A ROLE3A };
+		 user USER3X2 roles { ROLE1P ROLE2P ROLE3P };
+}
+
+user USER3BC roles { ROLE3B ROLE3C };

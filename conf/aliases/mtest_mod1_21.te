@@ -1,0 +1,52 @@
+module mtest_mod1_21 1.0;
+
+require {
+	class cl2 { p2a p2b p2c p2d p2e p2f p2g p2h p2i };
+	type ta1a;
+	type ta1b;
+	type ta3a;
+}
+
+type t2a;
+type t2b;
+type t2c;
+type t2x;
+
+typealias t2a alias ta2a;
+typealias t2b alias ta2b;
+typealias t2c alias ta2c;
+
+typealias ta1a alias ta2d;
+typealias ta1b alias ta2e;
+typealias ta3a alias ta2f;
+
+allow ta2a t2x : cl2 p2a;
+allow ta2b t2x : cl2 p2b;
+allow ta2c t2x : cl2 p2c;
+allow ta2d t2x : cl2 p2d;
+allow ta2e t2x : cl2 p2e;
+allow ta2f t2x : cl2 p2f;
+
+optional {
+  require {
+    type ta1c;
+  }
+  typealias ta1c alias ta2g;
+  allow ta2g t2x : cl2 p2g;
+}
+
+optional {
+  require {
+    type ta3b;
+  }
+  typealias ta3b alias ta2h;
+  allow ta2h t2x : cl2 p2h;
+}
+
+optional {
+  require {
+    type ta3c;
+  }
+  typealias ta3c alias ta2i;
+  allow ta2i t2x : cl2 p2i;
+}

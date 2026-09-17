@@ -1,0 +1,42 @@
+module mtest_mod1_06 1.0;
+
+require {
+	class cl2 { p2 };
+	sensitivity SENS1;
+}
+
+type t2b;
+type td2;
+
+allow td2 t2b : cl2 p2;
+
+attribute_role ar2;
+
+role r2b;
+role rn2;
+
+roleattribute r2b ar2;
+
+role ar2 types t2b;
+
+role_transition ar2 t2b : cl2 rn2;
+
+allow ar2 rn2;
+
+optional {
+  require {
+    attribute_role ar1;
+  }
+  role r1b;
+  roleattribute r1b ar1;
+}
+
+optional {
+  require {
+    attribute_role ar3;
+  }
+  role r3b;
+  roleattribute r3b ar3;
+}
+
+user us2b roles ar2 level SENS1 range SENS1;

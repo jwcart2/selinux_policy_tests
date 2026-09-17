@@ -1,0 +1,34 @@
+module mtest_mod3_23 1.0;
+
+require {
+	class cl4 { p4a p4b p4c p4d p4e p4f p4g p4h p4i };
+
+}
+
+type t4a;
+type t4b;
+type t4c;
+type t4d;
+type t4e;
+type t4f;
+type t4g;
+type t4h;
+type t4x;
+
+typealias t4a alias ta4a;
+typealias t4b alias ta4b;
+typealias t4c alias ta4c;
+typealias t4d alias ta4d;
+typealias t4e alias ta4e;
+typealias t4f alias ta4f;
+typealias t4g alias ta4g;
+typealias t4h alias ta4h;
+
+allow ta4a t4x : cl4 p4a;
+allow ta4b t4x : cl4 p4b;
+allow ta4c t4x : cl4 p4c;
+allow ta4d t4x : cl4 p4d;
+allow ta4e t4x : cl4 p4e;
+allow ta4f t4x : cl4 p4f;
+allow ta4g t4x : cl4 p4g;
+allow ta4h t4x : cl4 p4h;

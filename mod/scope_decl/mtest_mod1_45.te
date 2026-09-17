@@ -1,0 +1,100 @@
+module mtest_mod1_45 1.0;
+
+require {
+	class CLASS1 { PERM1 };
+}
+
+bool bool2a false;
+bool bool2b true;
+
+type t2a;
+type t2b;
+type t2c;
+type t2d;
+type t2e;
+type t2f;
+type t2g;
+type t2h;
+type t2i;
+type t2j;
+type t2k;
+type t2l;
+type t2m;
+type t2n;
+type t2r;
+type t2x;
+type t2z;
+
+optional {
+  require {
+    class cl2 { p2a cp2c p2b };
+    class cl7 { p7a cp1b p7c cp1a p7b };
+  }
+  allow t2b self : cl2 { p2a p2b cp2c };
+  allow t2g self : cl7 { cp1a p7a p7c p7b cp1b };
+}
+
+optional {
+  require {
+    class cl6 { p6a p6b p6c p6d };
+    class cl3 { cp1a p3a p3b p3c };
+  }
+  allow t2f self : cl6 { p6a p6b p6c p6d };
+  allow t2c self : cl3 { cp1a p3a p3b p3c };
+}
+
+optional {
+  require {
+    class cl9 { cp1b p9a cp1c };
+    class cl4 { cp2b cp2d p4a p4b p4c p4d };
+  }
+  allow t2d self : cl4 { cp2b cp2d p4a p4b p4c p4d };
+  allow t2i self : cl9 { cp1b cp1c p9a };
+}
+
+optional {
+  require {
+    class cl5 { cp1a p5a cp1b p5b cp1c p5c p5d p5e };
+    class cl1 { cp1b };
+  }
+  allow t2a self : cl1 { cp1b };
+  allow t2e self : cl5 { p5a p5b cp1a p5c cp1b p5d cp1c p5e };
+}
+
+optional {
+  require {
+    type t2a;
+  }
+  allow t2a t2x : CLASS1 PERM1;
+}
+
+optional {
+  require {
+    type t2z;
+  }
+  role r2z;
+  role r2z types t2z;
+}
+
+if (bool2a) {
+  allow t2b t2x : CLASS1 PERM1;
+} else {
+  allow t2c t2x : CLASS1 PERM1;
+}
+
+if (bool2b) {
+  allow t2d t2x : CLASS1 PERM1;
+} else {
+  allow t2e t2x : CLASS1 PERM1;
+}
+
+allow t2j self : CLASS1 PERM1;
+
+role r2a;
+role r2b;
+
+role r2a types t2r;
+role r2b types t2r;
+
+allow r2a r2b;
+role_transition r2a t2r:CLASS1 r2b;

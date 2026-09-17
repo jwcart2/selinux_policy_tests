@@ -1,0 +1,169 @@
+module mtest_mod2_45 1.0;
+
+require {
+	class CLASS1 { PERM1 };
+}
+
+bool bool3a false;
+bool bool3b true;
+bool bool3c true;
+bool bool3d true;
+bool bool3e false;
+bool bool3f false;
+
+type t3a;
+type t3b;
+type t3c;
+type t3d;
+type t3e;
+type t3f;
+type t3g;
+type t3h;
+type t3i;
+type t3j;
+type t3k;
+type t3l;
+type t3m;
+type t3n;
+type t3r;
+type t3x;
+type t3z;
+
+optional {
+  require {
+    class cl4 { cp2c cp2b cp2a cp2d };
+  }
+  allow t3d self : cl4 { cp2a cp2b cp2d cp2c };
+  optional {
+    require {
+      class cl5 { cp1c cp1a };
+    }
+    allow t3e self : cl5 { cp1c cp1a };
+  }
+}
+
+optional {
+  require {
+    class cl2 { cp2a p2a cp2d cp2c cp2b };
+  }
+  #allow t3b self : cl2 { cp2d cp2a cp2b cp2c p2a };
+  allow t3b self : cl2 *;
+  optional {
+    require {
+      class cl9 { cp1c p9a };
+    }
+    allow t3i self : cl9 { p9a cp1c };
+    optional {
+      require {
+        class cl1 { p1a cp1b };
+      }
+      allow t3a self : cl1 { cp1b p1a };
+    }
+  }
+  optional {
+    require {
+      class cl3 { cp1a cp1b p3a };
+    }
+    allow t3c self : cl3 { cp1a cp1b p3a };
+  }
+}
+
+optional {
+  require {
+    class cl7 { cp1a cp1b cp1c p7a };
+  }
+  allow t3g self : cl7 { cp1a cp1b cp1c p7a };
+}
+
+optional {
+  require {
+    type t3a;
+  }
+  allow t3a t3x : CLASS1 PERM1;
+  optional {
+    require {
+      type t2a;
+    }
+    allow t2a t3x : CLASS1 PERM1;
+  }
+}
+
+optional {
+  require {
+    type t2b, t2c;
+  }
+  if (bool3a) {
+    allow t3b t3x : CLASS1 PERM1;
+  } else {
+    allow t3c t3x : CLASS1 PERM1;
+  }
+  allow t2b t3x : CLASS1 PERM1;
+  allow t2c t3x : CLASS1 PERM1;
+}
+
+optional {
+  require {
+    type t3z;
+  }
+  role r3z;
+  role r3z types t3z;
+}
+
+if (bool3b) {
+  allow t3d t3x : CLASS1 PERM1;
+} else {
+  allow t3e t3x : CLASS1 PERM1;
+}
+
+if (bool3c) {
+  allow t3f t3x : CLASS1 PERM1;
+}
+
+if (!bool3d) {
+  allow t3g t3x : CLASS1 PERM1;
+}
+
+allow t3j self : CLASS1 PERM1;
+
+optional {
+  require {
+    type t2k, t2l;
+    type BAD_TYPE3A;
+  }
+  if (bool3e) {
+    allow t2k t3x : CLASS1 PERM1;
+    allow t3k t3x : CLASS1 PERM1;
+  } else {
+    allow t2l t3x : CLASS1 PERM1;
+    allow t3l t3x : CLASS1 PERM1;
+    allow BAD_TYPE3A t3x : CLASS1 PERM1;
+  }
+}
+
+optional {
+  require {
+    type t2m;
+  }
+  allow t2m t3x : CLASS1 PERM1;
+  allow t3m t3x : CLASS1 PERM1;
+  optional {
+    require {
+      type t2n;
+      type BAD_TYPE3B;
+    }
+    if (!bool3f) {
+      allow t2n t3x : CLASS1 PERM1;
+      allow t3n t3x : CLASS1 PERM1;
+      allow BAD_TYPE3B t3x : CLASS1 PERM1;
+    }
+  }
+}
+
+role r3a;
+role r3b;
+
+role r3a types t3r;
+role r3b types t3r;
+
+allow r3a r3b;
+role_transition r3a t3r:CLASS1 r3b;

@@ -1,0 +1,93 @@
+# Testing semantic and normal MLS levels and ranges for users
+
+class CLASS1
+
+sid kernel
+
+class CLASS1 { PERM1 }
+
+sensitivity SENS1;
+sensitivity s0;
+sensitivity s1;
+sensitivity s2;
+sensitivity s3;
+sensitivity s4;
+sensitivity s5;
+sensitivity s6;
+sensitivity s7;
+sensitivity s8;
+sensitivity s9;
+dominance { SENS1 s0 s1 s2 s3 s4 s5 s6 s7 s8 s9 }
+category c0;
+category c1;
+category c2 alias { ca2a ca2b };
+category c3 alias ca3;
+category c4;
+category c5;
+category c6;
+category c7;
+category c8;
+category c9;
+
+level SENS1;
+level s0;
+level s1;
+level s2:c0;
+level s3:c0,c2;
+level s4:c0,c3;
+level s5:c0,c2.c4;
+level s6:c0,c4.c5;
+level s7:c0,c2.c6, c8.c9;
+level s8:c0, c3, c5.c7, c9;
+level s9:c0.c9;
+
+mlsconstrain CLASS1 { PERM1 } ((h1 dom h2) and (l1 domby h1));
+
+type TYPE1;
+type ts0;
+type ts1;
+type to0;
+type to1;
+
+allow TYPE1 self : CLASS1 PERM1;
+
+range_transition ts0 to0 : CLASS1 s0 - s9:c1.c9;
+
+optional {
+  require {
+    class CLASS1 { PERM1 };
+	type ts1;
+	type to1;
+	sensitivity s1, s9;
+	category c0, c1, c9;
+  }
+  range_transition ts1 to1 : CLASS1 s1 - s9:c0;
+  user us1 roles rs1 level s1 range s1 - s9:c1,c9;
+}
+
+optional {
+  require {
+    class CLASS1 { PERM1 };
+	sensitivity s2, s9;
+	category c0, c2, c3, c4, c5;
+  }
+  type ts2;
+  type to2;
+  role rs2;
+  role rs2 types ts2;
+  range_transition ts2 to2 : CLASS1 s2 - s9:c0,c2;
+  user us2 roles rs2 level s2 range s2 - s9:c3.c5;
+}
+
+role ROLE1;
+role rs0;
+role rs1;
+
+role ROLE1 types TYPE1;
+role rs0 types ts0;
+role rs1 types ts1;
+
+user USER1 roles ROLE1 level SENS1 range SENS1;
+user us0 roles rs0 level s0 range s0 - s9:c0.c9;
+
+sid kernel USER1:ROLE1:TYPE1:SENS1

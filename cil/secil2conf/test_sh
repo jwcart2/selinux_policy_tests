@@ -1,0 +1,17 @@
+#!/usr/bin/bash
+
+PREFIX=~/local
+
+export LD_LIBRARY_PATH=$PREFIX/lib:$PREFIX/usr/lib:$PREFIX/usr/lib64:$PREFIX/usr/libexec:${LD_LIBRARY_PATH}
+
+echo ${LD_LIBRARY_PATH}
+
+for T in 01 02 03
+do
+	echo "test_$T"
+	$PREFIX/usr/bin/secil2conf -M 1 -o test_${T}.conf test_${T}.cil
+	$PREFIX/usr/bin/checkpolicy -M -o test_${T}.bin test_${T}.conf
+done
+
+mv *.conf tmp
+mv *.bin tmp

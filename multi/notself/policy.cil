@@ -1,0 +1,159 @@
+(handleunknown deny)
+(class CLASS1 (PERM1A PERM1B PERM1C PERM1D))
+(class CLASS2 (PERM2A PERM2B PERM2C PERM2D))
+(class CLASS3 (PERM3A PERM3B PERM3C PERM3D))
+(class CLASS4 (ioctl))
+(class CLASS5 (ioctl))
+(class CLASS6 (ioctl))
+(classorder (CLASS1 CLASS2 CLASS3 CLASS4 CLASS5 CLASS6))
+(sid kernel)
+(sidorder (kernel))
+(user USER1)
+(role ROLE1)
+(type TYPE1)
+(type TYPE2)
+(type TYPE3)
+(typeattribute TATTR1)
+(typeattribute TATTR2)
+(typeattribute TATTR3)
+(typeattributeset TATTR1 (TYPE1 TYPE2 TYPE3))
+(typeattributeset TATTR2 (TYPE1 TYPE2))
+(typeattributeset TATTR3 (and TATTR1 (not TATTR2)))
+(category CAT1)
+(categoryorder (CAT1))
+(sensitivity SENS1)
+(sensitivityorder (SENS1))
+(sensitivitycategory SENS1 (CAT1))
+(roletype ROLE1 TYPE1)
+(userrole USER1 ROLE1)
+(userlevel USER1 (SENS1))
+(userrange USER1 ((SENS1)(SENS1 (CAT1))))
+(sidcontext kernel (USER1 ROLE1 TYPE1 ((SENS1)(SENS1))))
+
+
+; Test self neverallow [One test does NOT work]
+
+;(allow TYPE1    self (CLASS1 (PERM1A))) ; Neverallow violation
+;(allow TYPE1   TYPE1 (CLASS1 (PERM1A))) ; Neverallow violation
+;(allow TYPE1  TATTR1 (CLASS1 (PERM1A))) ; Neverallow violation
+;(allow TATTR1 TATTR1 (CLASS1 (PERM1A))) ; Neverallow violation
+;(allow TATTR1 TATTR2 (CLASS1 (PERM1A))) ; Neverallow violation
+(neverallow TYPE1 self (CLASS1 (PERM1A)))
+
+;(allow TYPE1    self (CLASS1 (PERM1B))) ; Neverallow violation [ Not finding ]
+;(allow TYPE1   TYPE1 (CLASS1 (PERM1B))) ; Neverallow violation
+;(allow TYPE1  TATTR1 (CLASS1 (PERM1B))) ; Neverallow violation
+;(allow TATTR1 TATTR1 (CLASS1 (PERM1B))) ; Neverallow violation
+;(allow TATTR1 TATTR2 (CLASS1 (PERM1B))) ; Neverallow violation
+(allow TYPE1 TYPE2 (CLASS1 (PERM1B)))
+(neverallow TATTR1 self (CLASS1 (PERM1B)))
+
+
+; Test notself neverallow [WORKS]
+
+(allow TYPE1  self (CLASS2 (PERM2A)))
+(allow TYPE2 TYPE2 (CLASS2 (PERM2A)))
+;(allow TYPE1   TYPE2 (CLASS2 (PERM2A))) ; Neverallow violation
+;(allow TYPE1  TATTR1 (CLASS2 (PERM2A))) ; Neverallow violation
+;(allow TATTR1 TATTR1 (CLASS2 (PERM2A))) ; Neverallow violation
+;(allow TATTR1 TATTR2 (CLASS2 (PERM2A))) ; Neverallow violation
+(neverallow TYPE1 notself (CLASS2 (PERM2A)))
+
+(allow TYPE1  self (CLASS2 (PERM2B)))
+(allow TYPE2 TYPE2 (CLASS2 (PERM2B)))
+;(allow TYPE1   TYPE2 (CLASS2 (PERM2B))) ; Neverallow violation
+;(allow TYPE1  TATTR1 (CLASS2 (PERM2B))) ; Neverallow violation
+;(allow TATTR1 TATTR1 (CLASS2 (PERM2B))) ; Neverallow violation
+;(allow TATTR1 TATTR2 (CLASS2 (PERM2B))) ; Neverallow violation
+(neverallow TATTR1 notself (CLASS2 (PERM2B)))
+
+
+; Test minusself neverallow [WORKS]
+
+(allow TYPE1  self (CLASS3 (PERM3A)))
+(allow TYPE2 TYPE2 (CLASS3 (PERM3A)))
+;(allow TYPE1   TYPE2 (CLASS3 (PERM3A))) ; Neverallow violation
+;(allow TYPE1  TATTR1 (CLASS3 (PERM3A))) ; Neverallow violation
+;(allow TATTR1 TATTR1 (CLASS3 (PERM3A))) ; Neverallow violation
+;(allow TATTR1 TATTR2 (CLASS3 (PERM3A))) ; Neverallow violation
+;(neverallow TATTR1 minusself (CLASS3 (PERM3A))) ; Not implemented
+
+(allow TYPE1  self (CLASS3 (PERM3B)))
+(allow TYPE2 TYPE2 (CLASS3 (PERM3B)))
+;(allow TYPE1   TYPE2 (CLASS3 (PERM3B))) ; Neverallow violation
+;(allow TYPE1  TATTR1 (CLASS3 (PERM3B))) ; Neverallow violation
+;(allow TATTR1 TATTR1 (CLASS3 (PERM3B))) ; Neverallow violation
+;(allow TATTR1 TATTR2 (CLASS3 (PERM3B))) ; Neverallow violation
+;(neverallow TATTR2 minusself (CLASS3 (PERM3B))) ; Not implemented
+(neverallow TATTR3 TATTR1 (CLASS3 (PERM3B)))
+
+
+; Test self neverallowxperm
+
+(allow TATTR1 TATTR1 (CLASS4 (ioctl)))
+(allowx TATTR1 TATTR1 (ioctl CLASS4 (0x9401)))
+
+;(allowx TYPE1    self (ioctl CLASS4 (0x9411))) ; Neverallowx violation
+;(allowx TYPE1   TYPE1 (ioctl CLASS4 (0x9411))) ; Neverallowx violation
+;(allowx TYPE1  TATTR1 (ioctl CLASS4 (0x9411))) ; Neverallowx violation
+;(allowx TATTR1   self (ioctl CLASS4 (0x9411))) ; Neverallowx violation
+;(allowx TATTR1 TATTR1 (ioctl CLASS4 (0x9411))) ; Neverallowx violation
+;(allowx TATTR1 TATTR2 (ioctl CLASS4 (0x9411))) ; Neverallowx violation
+(allowx TYPE1 TYPE2 (ioctl CLASS4 (0x9411)))
+(neverallowx TYPE1 self (ioctl CLASS4 (0x9411)))
+
+;(allowx TYPE1    self (ioctl CLASS4 (0x9421))) ; Neverallowx violation
+;(allowx TYPE1   TYPE1 (ioctl CLASS4 (0x9421))) ; Neverallowx violation
+;(allowx TYPE1  TATTR1 (ioctl CLASS4 (0x9421))) ; Neverallowx violation
+;(allowx TATTR1   self (ioctl CLASS4 (0x9421))) ; Neverallowx violation
+;(allowx TATTR1 TATTR1 (ioctl CLASS4 (0x9421))) ; Neverallowx violation
+;(allowx TATTR1 TATTR2 (ioctl CLASS4 (0x9421))) ; Neverallowx violation
+(allowx TYPE1 TYPE2 (ioctl CLASS4 (0x9421)))
+;(neverallowx TATTR1 self (ioctl CLASS4 (0x9421)))
+
+
+; Test notself neverallowxperm
+
+(allow TATTR1 TATTR1 (CLASS5 (ioctl)))
+(allowx TATTR1 TATTR1 (ioctl CLASS5 (0x9501)))
+
+(allowx TYPE1  self (ioctl CLASS5 (0x9511)))
+(allowx TYPE2 TYPE2 (ioctl CLASS5 (0x9511)))
+;(allowx TYPE1   TYPE2 (ioctl CLASS5 (0x9511))) ; Neverallowx violation
+;(allowx TYPE1  TATTR1 (ioctl CLASS5 (0x9511))) ; Neverallowx violation
+;(allowx TATTR1 TATTR1 (ioctl CLASS5 (0x9511))) ; Neverallowx violation
+;(allowx TATTR1 TATTR2 (ioctl CLASS5 (0x9511))) ; Neverallowx violation
+;(neverallowx TYPE1 notself (ioctl CLASS5 (0x9511)))
+
+(allowx TYPE1  self (ioctl CLASS5 (0x9521)))
+(allowx TYPE2 TYPE2 (ioctl CLASS5 (0x9521)))
+;(allowx TYPE1   TYPE2 (ioctl CLASS5 (0x9521))) ; Neverallowx violation
+;(allowx TYPE1  TATTR1 (ioctl CLASS5 (0x9521))) ; Neverallowx violation
+;(allowx TATTR1 TATTR1 (ioctl CLASS5 (0x9521))) ; Neverallowx violation
+;(allowx TATTR1 TATTR2 (ioctl CLASS5 (0x9521))) ; Neverallowx violation
+;(neverallowx TATTR1 notself (ioctl CLASS5 (0x9521)))
+
+
+; Test minusself neverallowxperm
+
+(allow TATTR1 TATTR1 (CLASS6 (ioctl)))
+(allowx TATTR1 TATTR1 (ioctl CLASS6 (0x9601)))
+
+(allowx TYPE1  self (ioctl CLASS6 (0x9611)))
+(allowx TYPE2 TYPE2 (ioctl CLASS6 (0x9611)))
+;(allowx TYPE1   TYPE2 (ioctl CLASS6 (0x9611))) ; Neverallowx violation
+;(allowx TYPE1  TATTR1 (ioctl CLASS6 (0x9611))) ; Neverallowx violation
+;(allowx TATTR1 TATTR1 (ioctl CLASS6 (0x9611))) ; Neverallowx violation
+;(allowx TATTR1 TATTR2 (ioctl CLASS6 (0x9611))) ; Neverallowx violation
+;(neverallowx TYPE1 minusself (ioctl CLASS6 (0x9611)))
+
+(allowx TYPE1  self (ioctl CLASS6 (0x9621)))
+(allowx TYPE2 TYPE2 (ioctl CLASS6 (0x9621)))
+(allowx TYPE1 TYPE3 (ioctl CLASS6 (0x9621)))
+;(allowx TYPE1   TYPE2 (ioctl CLASS6 (0x9621))) ; Neverallowx violation
+;(allowx TYPE1  TATTR1 (ioctl CLASS6 (0x9621))) ; Neverallowx violation
+;(allowx TATTR1 TATTR1 (ioctl CLASS6 (0x9621))) ; Neverallowx violation
+;(allowx TATTR1 TATTR2 (ioctl CLASS6 (0x9621))) ; Neverallowx violation
+;(neverallowx TATTR2 minusself (ioctl CLASS6 (0x9621)))
+;(neverallowx TATTR3 TATTR1 (ioctl CLASS6 (0x9621)))
+

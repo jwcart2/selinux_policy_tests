@@ -1,0 +1,3 @@
+
+(type ta3)
+(neverallow ta3 self (c1 (p1a)))

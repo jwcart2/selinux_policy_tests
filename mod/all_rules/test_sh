@@ -1,0 +1,39 @@
+#!/usr/bin/bash
+
+PREFIX=~/local
+
+export LD_LIBRARY_PATH=$PREFIX/lib:$PREFIX/usr/lib:$PREFIX/usr/lib64:$PREFIX/usr/libexec:${LD_LIBRARY_PATH}
+
+
+echo "checkmodule: base_1.mod"
+$PREFIX/usr/bin/checkmodule -M -o base_01.mod base_01.te
+
+echo "checkmodule: mod_2.mod"
+$PREFIX/usr/bin/checkmodule -M -m -o mod_02.mod mod_02.te
+
+echo "checkmodule: mod_3.mod"
+$PREFIX/usr/bin/checkmodule -M -m -o mod_03.mod mod_03.te
+
+echo "semodule_package: base_1.pp"
+$PREFIX/usr/bin/semodule_package -o base_01.pp -m base_01.mod
+
+echo "semodule_package: mod_2.pp"
+$PREFIX/usr/bin/semodule_package -o mod_02.pp -m mod_02.mod
+
+echo "semodule_package: mod_3.pp"
+$PREFIX/usr/bin/semodule_package -o mod_03.pp -m mod_03.mod
+
+echo "semodule_link: policy_mod.lnk"
+$PREFIX/usr/bin/semodule_link -o policy_mod.lnk base_01.pp mod_02.pp mod_03.pp
+
+echo "semodule_expand: policy_mod.bin"
+$PREFIX/usr/bin/semodule_expand -a policy_mod.lnk policy_mod.bin
+
+echo "checkpolicy: policy_mod.bin.conf"
+$PREFIX/usr/bin/checkpolicy -M -F -b -o policy_mod.bin.conf policy_mod.bin
+
+mv *.mod tmp/
+mv *.pp tmp/
+mv *.lnk tmp/
+mv *.bin tmp/
+mv *.bin.conf tmp/

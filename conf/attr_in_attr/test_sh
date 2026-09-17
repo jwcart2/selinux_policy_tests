@@ -1,0 +1,33 @@
+#!/usr/bin/bash
+
+PREFIX=~/local
+
+export LD_LIBRARY_PATH=${PREFIX}/lib:${PREFIX}/usr/lib:${PREFIX}/usr/lib64:${PREFIX}/usr/libexec:${LD_LIBRARY_PATH}
+
+for T in 00 01 03
+do
+	echo
+	echo "Starting: $T"
+	echo
+	echo "checkpolicy: ctest_attr_$T.bin"
+	$PREFIX/usr/bin/checkpolicy -M -o ctest_attr_$T.bin ctest_attr_$T.conf
+
+	echo "checkpolicy: ctest_attr_$T.bin.conf"
+	$PREFIX/usr/bin/checkpolicy -M -F -b -o ctest_attr_$T.bin.conf ctest_attr_$T.bin
+done
+
+echo "Testing loop detection. This should end in an error"
+for T in 02 04
+do
+	echo
+	echo "Starting: $T [Expect this to end in an error]"
+	echo
+	echo "checkpolicy: ctest_attr_$T.bin"
+	$PREFIX/usr/bin/checkpolicy -M -o ctest_attr_$T.bin ctest_attr_$T.conf
+
+	echo "checkpolicy: ctest_attr_$T.bin.conf"
+	$PREFIX/usr/bin/checkpolicy -M -F -b -o ctest_attr_$T.bin.conf ctest_attr_$T.bin
+done
+
+mv *.bin tmp/
+mv *.bin.conf tmp/

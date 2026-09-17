@@ -1,0 +1,42 @@
+module mtest_mod1_20 1.0;
+
+require {
+	class cl2 { p2a p2b p2c p2d p2e };
+}
+
+type t2a;
+type t2b;
+type t2c;
+type t2d;
+
+typealias t2a alias ta2a1;
+typealias ta2a1 alias ta2a2;
+typealias ta2a2 alias ta2a3;
+#typealias ta2a3 alias ta2a1; # Duplicate declaration
+
+allow t2a t2d : cl2 p2a;
+
+optional {
+  require {
+    type ta1a1;
+  }
+  typealias ta1a1 alias ta2a4;
+  allow ta2a4 t2d : cl2 p2b;
+}
+
+optional {
+  require {
+    type ta3a1;
+  }
+  typealias ta3a1 alias ta2a5;
+  allow ta2a5 t2d : cl2 p2c;
+}
+
+optional {
+  require {
+    type ta1a2;
+  }
+  typealias ta1a2 alias ta2a6;
+  allow ta2a6 t2d : cl2 p2d;
+}
+ 

@@ -1,0 +1,60 @@
+# Investigating attributes and role attributes and make sure they work
+
+class CLASS1
+class cl1
+class cl2
+class cl3
+
+sid kernel
+
+class CLASS1 { PERM1 }
+class cl1 { p1 }
+class cl2 { p2 }
+class cl3 { p3 }
+
+sensitivity SENS1;
+dominance { SENS1 }
+level SENS1;
+mlsconstrain CLASS1 { PERM1 } ((h1 dom h2) and (l1 domby h1));
+
+attribute at1;
+
+type TYPE1;
+type t1a;
+type td1;
+
+typeattribute t1a at1;
+
+optional {
+  require {
+    attribute at2;
+  }
+  type t2a;
+  typeattribute t2a at2;
+}
+
+optional {
+  require {
+    attribute at3;
+  }
+  type t3a;
+  typeattribute t3a at3;
+}
+
+allow TYPE1 self : CLASS1 PERM1;
+allow td1 at1 : cl1 p1;
+
+role ROLE1;
+role r1a;
+role rn1;
+
+role ROLE1 types TYPE1;
+role r1a types at1;
+
+role_transition r1a at1 : cl1 rn1;
+
+user USER1 roles ROLE1 level SENS1 range SENS1;
+
+constrain cl1 { p1 } (t1 == at1);
+
+sid kernel USER1:ROLE1:TYPE1:SENS1

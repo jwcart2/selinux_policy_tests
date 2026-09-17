@@ -1,0 +1,35 @@
+module mtest_mod2_12 1.0;
+
+# If module requires not met then there will be a link error
+require {
+	class CLASS3 { PERM3 ioctl };
+}
+
+type TM2;
+type tm2a;
+type tm2b;
+type tm2c;
+type tm2d;
+type tm2e;
+type tm2f;
+type tm2o;
+
+allow TM2 self : CLASS3 PERM3;
+
+allow tm2a tm2o : CLASS3 ioctl;
+allowxperm tm2a tm2o : CLASS3 ioctl 0x0008;
+
+allow tm2b tm2o : CLASS3 ioctl;
+allowxperm tm2b tm2o : CLASS3 ioctl 0x0080;
+
+allow tm2c tm2o : CLASS3 ioctl;
+allowxperm tm2c tm2o : CLASS3 ioctl 0x00ff;
+
+allow tm2d tm2o : CLASS3 ioctl;
+allowxperm tm2d tm2o : CLASS3 ioctl 0x7fff;
+
+allow tm2e tm2o : CLASS3 ioctl;
+allowxperm tm2e tm2o : CLASS3 ioctl 0x8001;
+
+allow tm2f tm2o : CLASS3 ioctl;
+allowxperm tm2f tm2o : CLASS3 ioctl 0xffff;

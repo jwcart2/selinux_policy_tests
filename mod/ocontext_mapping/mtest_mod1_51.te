@@ -1,0 +1,17 @@
+module mtest_mod1_51 1.0;
+
+require {
+  class CLASS1 { PERM1 };
+  type TYPE1;
+}
+
+type TM1;
+type UGLY_TYPE;
+
+optional {
+  require {
+    type TM1;
+  }
+  role RM1;
+  role RM1 types TM1;
+}

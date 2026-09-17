@@ -1,0 +1,23 @@
+#!/usr/bin/bash
+
+PREFIX=~/local
+
+export LD_LIBRARY_PATH=$PREFIX/lib:$PREFIX/usr/lib:$PREFIX/usr/lib64:$PREFIX/usr/libexec:${LD_LIBRARY_PATH}
+
+echo ${LD_LIBRARY_PATH}
+
+rm -f *.bin
+
+for T in 01 02 03 05 06
+do
+	echo "test_$T"
+	$PREFIX/usr/bin/secilc -M 1 -o test_${T}a.bin test_${T}a.cil
+	$PREFIX/usr/bin/secilcheck test_${T}a.bin test_${T}b.cil
+done
+
+echo "test_07"
+$PREFIX/usr/bin/secilc -M 1 -o test_07a.bin test_07a.cil
+$PREFIX/usr/bin/secilcheck test_07a.bin test_07b.cil test_07c.cil
+
+mv *.bin tmp/
+mv file_contexts tmp/

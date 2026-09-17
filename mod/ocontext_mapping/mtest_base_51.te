@@ -1,0 +1,52 @@
+# Trying to get an invalid mapping for an ocontext in expand.c:context_copy()
+
+class CLASS1
+
+sid kernel
+
+class CLASS1 { PERM1 }
+
+sensitivity SENS1;
+dominance { SENS1 }
+level SENS1;
+mlsconstrain CLASS1 { PERM1 } ((h1 dom h2) and (l1 domby h1));
+
+type TYPE1;
+type TYPE2;
+type TYPE3;
+attribute TYPEATTR3;
+
+allow TYPE1 self : CLASS1 PERM1;
+
+role ROLE1;
+role ROLE2;
+role ROLE3;
+attribute_role ROLEATTR2;
+
+role ROLE1 types TYPE1;
+role ROLEATTR2 types TYPE2;
+role ROLE3 types TYPEATTR3;
+
+optional {
+  require {
+    type BAD_TYPE;
+  }
+  type UGLY_TYPE;
+  allow UGLY_TYPE self : CLASS1 PERM1;
+  role ROLE1 types UGLY_TYPE;
+  roleattribute ROLE2 ROLEATTR2;
+  typeattribute TYPE3 TYPEATTR3;
+}
+
+user USER1 roles ROLE1 level SENS1 range SENS1;
+user USER2 roles ROLEATTR2 level SENS1 range SENS1;
+user USER3 roles ROLE3 level SENS1 range SENS1;
+
+sid kernel USER1:ROLE1:TYPE1:SENS1
+
+portcon udp 1000 USER1:ROLE1:TYPE1:SENS1
+portcon udp 1001-1009 USER1:ROLE1:UGLY_TYPE:SENS1 # UGLY_TYPE not within scope
+portcon udp 1010 USER2:ROLEATTR2:TYPE2:SENS1 # ROLEATTR2 is left in binary
+                                             # with no role associated with it.
+portcon udp 1020 USER3:ROLE3:TYPEATTR3:SENS1 # "type TYPEATTR3 is not defined or is
+                                              #  an attribute"

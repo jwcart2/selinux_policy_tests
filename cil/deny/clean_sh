@@ -1,0 +1,4 @@
+
+rm -f tmp/*.bin
+rm -f tmp/*.bin.cil
+rm -f tmp/file_contexts

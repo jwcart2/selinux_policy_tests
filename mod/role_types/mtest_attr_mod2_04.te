@@ -1,0 +1,72 @@
+module mtest_attr_mod2_04 1.0;
+
+require {
+	class cl3 { p3 };
+	sensitivity SENS1;
+	attribute at1;
+	attribute at2;
+	attribute_role ar1;
+	attribute_role ar2;
+}
+
+attribute at3;
+
+type t1c;
+type t2c;
+type t3c;
+type td3;
+
+typeattribute t1c at1;
+typeattribute t2c at2;
+typeattribute t3c at3;
+
+allow td3 at3 : cl3 p3;
+
+attribute_role ar3;
+
+role r1c;
+role r2c;
+role r3c;
+role rn3;
+
+roleattribute r1c ar1;
+roleattribute r2c ar2;
+roleattribute r3c ar3;
+
+role ar3 types at3;
+
+role_transition ar3 at3 : cl3 rn3;
+
+allow ar3 rn3;
+
+optional {
+  require {
+	type bad_tx1c;
+	role bad_rx1c;
+  }
+  type t1cx;
+  typeattribute t1cx at1;
+  typeattribute bad_tx1c at1;
+  role r1cx;
+  roleattribute r1cx ar1;
+  roleattribute bad_rx1c ar1;
+  user us1cx roles ar1 level SENS1 range SENS1;
+}
+
+optional {
+  require {
+	type bad_tx2c;
+	role bad_rx2c;
+  }
+  type t2cx;
+  typeattribute t2cx at2;
+  typeattribute bad_tx2c at2;
+  role r2cx;
+  roleattribute r2cx ar2;
+  roleattribute bad_rx2c ar2;
+  user us2cx roles ar2 level SENS1 range SENS1;
+}
+
+user us1c roles ar1 level SENS1 range SENS1;
+user us2c roles ar2 level SENS1 range SENS1;
+user us3c roles ar3 level SENS1 range SENS1;

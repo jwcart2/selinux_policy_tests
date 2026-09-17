@@ -1,0 +1,92 @@
+module mod_2 0.0.1;
+
+require {
+	class CLASS2 PERM2A;
+	role ROLE2A, ROLE3A;
+	attribute_role ROLE_ATTR123A;
+}
+
+attribute TYPE_ATTR2BC;
+
+type TYPE2;
+type TYPE2A;
+type TYPE2B;
+type TYPE2C;
+type TYPE2BC;
+type TYPE2T;
+type TYPE2X;
+type TYPE23B;
+
+typeattribute TYPE2B TYPE_ATTR2BC;
+typeattribute TYPE2C TYPE_ATTR2BC;
+
+allow TYPE2 self : CLASS2 PERM2A;
+
+attribute_role ROLE_ATTR2A;
+attribute_role ROLE_ATTR2B;
+attribute_role ROLE_ATTR2C;
+attribute_role ROLE_ATTR2BC;
+attribute_role ROLE_ATTR23B;
+attribute_role ROLE_ATTR3A;
+
+role ROLE2;
+role ROLE2B;
+role ROLE2C;
+role ROLE2BC;
+role ROLE2T;
+role ROLE2X;
+role ROLE23B;
+role ROLE3P;
+
+roleattribute ROLE2A ROLE_ATTR2A;
+roleattribute ROLE2B ROLE_ATTR2B;
+roleattribute ROLE2C ROLE_ATTR2C;
+roleattribute ROLE_ATTR2A ROLE_ATTR123A;
+roleattribute ROLE_ATTR2B ROLE_ATTR23B;
+roleattribute ROLE_ATTR2B ROLE_ATTR2BC;
+roleattribute ROLE_ATTR2C ROLE_ATTR2BC;
+roleattribute ROLE3A ROLE_ATTR3A;
+
+role ROLE2 types TYPE2;
+role ROLE_ATTR2A types TYPE2A;
+role ROLE_ATTR2BC types TYPE_ATTR2BC;
+role ROLE_ATTR23B types TYPE23B;
+
+allow ROLE_ATTR2A ROLE2T;
+allow ROLE2T ROLE_ATTR2A;
+allow ROLE_ATTR2BC ROLE2BC;
+allow ROLE2BC ROLE_ATTR2BC;
+allow ROLE_ATTR23B ROLE23B;
+allow ROLE23B ROLE_ATTR23B;
+
+role_transition ROLE_ATTR2A TYPE2A:CLASS2 ROLE2T;
+role_transition ROLE_ATTR2BC TYPE2BC:CLASS2 ROLE2T;
+role_transition ROLE_ATTR23B TYPE23B:CLASS2 ROLE23B;
+
+optional {
+		 require {
+		 		 class CLASS2 PERM2A;
+				 role ROLE2T;
+				 attribute_role ROLE_ATTR123P;
+				 }
+		 type TYPE2P;
+		 type TYPE23P;
+		 attribute_role ROLE_ATTR2P;
+		 attribute_role ROLE_ATTR23P;
+		 role ROLE2P;
+		 role ROLE23P;
+		 roleattribute ROLE2P ROLE_ATTR2P;
+		 roleattribute ROLE_ATTR2P ROLE_ATTR23P;
+		 roleattribute ROLE_ATTR2P ROLE_ATTR123P;
+		 role ROLE_ATTR2P types TYPE2P;
+		 role ROLE_ATTR23P types TYPE23P;
+		 allow ROLE_ATTR2P ROLE2T;
+		 allow ROLE2T ROLE_ATTR2P;
+		 allow ROLE_ATTR23P ROLE23P;
+		 allow ROLE23P ROLE_ATTR23P;
+		 role_transition ROLE_ATTR2P TYPE2P:CLASS2 ROLE2T;
+		 role_transition ROLE_ATTR23P TYPE23P:CLASS2 ROLE23P;
+		 user USER2P roles ROLE_ATTR23P;
+}
+
+user USER2BC roles ROLE_ATTR2BC;

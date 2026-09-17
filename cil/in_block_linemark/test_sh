@@ -1,0 +1,17 @@
+#!/usr/bin/bash
+
+PREFIX=/home/jwcart2/local
+
+export LD_LIBRARY_PATH=${PREFIX}/lib:${PREFIX}/usr/lib:${PREFIX}/usr/lib64:${PREFIX}/usr/libexec:${LD_LIBRARY_PATH}
+
+
+for T in 01
+do
+	echo "secilc: test_$T.bin"
+	$PREFIX/usr/bin/secilc -o test_$T.bin test_$T.cil test_${T}a.cil
+	$PREFIX/usr/bin/secil2tree -o test$T.tree test_$T.cil test_${T}a.cil
+done
+
+#mv *.bin tmp/
+mv *.tree tmp/
+#mv file_contexts tmp/

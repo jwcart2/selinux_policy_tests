@@ -1,0 +1,20 @@
+#!/usr/bin/bash
+
+PREFIX=~/local
+
+export LD_LIBRARY_PATH=$PREFIX/lib:$PREFIX/usr/lib:${LD_LIBRARY_PATH}
+
+# CIL Testing
+$PREFIX/usr/bin/secilc -M 1 -o cil_test_01.bin cil_test_01.cil
+$PREFIX/usr/bin/checkpolicy -M -C -b -o cil_test_01.bin.cil cil_test_01.bin
+$PREFIX/usr/bin/secilc -M 1 -o cil_test_01.bin.cil.bin cil_test_01.bin.cil
+
+# Conf Testing
+$PREFIX/usr/bin/checkpolicy -M -o conf_test_01.bin conf_test_01.conf
+$PREFIX/usr/bin/checkpolicy -F -b -M -o conf_test_01.bin.conf conf_test_01.bin
+$PREFIX/usr/bin/checkpolicy -M -o conf_test_01.bin.conf.bin conf_test_01.bin.conf
+
+mv *.bin tmp/
+mv *.bin.cil tmp/
+mv *.bin.conf tmp/
+mv file_contexts tmp/

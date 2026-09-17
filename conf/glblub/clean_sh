@@ -1,0 +1,7 @@
+
+rm -f tmp/*.sediff
+rm -f tmp/*.cil
+rm -f tmp/*.bin
+rm -f tmp/*.bin.conf
+rm -f tmp/*.cil.conf
+rm -f tmp/file_contexts

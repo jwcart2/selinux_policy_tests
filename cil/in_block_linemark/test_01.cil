@@ -1,0 +1,93 @@
+;; Minimum stuff
+(class CLASS (PERM))
+(classorder (CLASS))
+(sid SID)
+(sidorder (SID))
+(user USER)
+(role ROLE)
+(type TYPE)
+(category CAT)
+(categoryorder (CAT))
+(sensitivity SENS)
+(sensitivityorder (SENS))
+(sensitivitycategory SENS (CAT))
+(allow TYPE self (CLASS (PERM)))
+(roletype ROLE TYPE)
+(userrole USER ROLE)
+(userlevel USER (SENS))
+(userrange USER ((SENS)(SENS (CAT))))
+(sidcontext SID (USER ROLE TYPE ((SENS)(SENS))))
+
+;; Extra stuff
+(common COMMON (PERM1 PERM2 PERM3 PERM4 PERMBAD))
+(classcommon CLASS COMMON)
+
+
+
+;; Interesting stuff
+
+(type tBAD)
+(neverallow tBAD self (CLASS (PERMBAD)))
+
+
+
+(type t0)
+(allow t0 self (CLASS (PERM1)))
+(block b0
+       (type t)
+       (allow t0 self (CLASS (PERM2)))
+       (allow t0 t (CLASS (PERM3)))
+)
+
+
+;; Check if t3 is resolved as a global
+(type t3)
+(allow t3 self (CLASS (PERM)))
+(block b3
+       (type t3)
+       (allow t3 self (CLASS (PERM1)))
+       (block ba
+       	      (allow t3 self (CLASS (PERM2)))
+	      (allow b3.t3 self (CLASS (PERM3)))
+	      (allow .b3.t3 self (CLASS (PERM4)))
+	)
+)
+
+
+;; Check macro inside block works
+(type t4)
+(block b4
+       (type t)
+       (macro ma ((type ARG1))
+       	      (type ma_t)
+	      (allow ma_t t (CLASS (PERM1)))
+	      (allow ma_t ARG1 (CLASS (PERM2)))
+       )
+)
+(call b4.ma (t4))
+(type t4a)
+(block b4a
+       (blockinherit b4)
+       (call ma (t4a))
+)
+
+
+;; Check optional resolves
+(type t7)
+(optional option7
+	  (type o7_ta)
+	  (allow t7 o7_ta (CLASS (PERM1)))
+)
+(allow t7 o7_ta (CLASS (PERM3)))
+(allow t7 o7_tb (CLASS (PERM3)))
+
+
+;; Check resolution failure handling for optionals
+(optional option8
+	  (allow UNKNOWN self (CLASS (PERM)))
+)
+
+
+(block b15
+       (type b15_ta) ;; b15.b15_ta
+)

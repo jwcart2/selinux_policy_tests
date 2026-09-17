@@ -1,0 +1,23 @@
+#!/usr/bin/bash
+
+PREFIX=/home/jwcart2/local
+
+export LD_LIBRARY_PATH=${PREFIX}/lib:${PREFIX}/usr/lib:${PREFIX}/usr/lib64:${PREFIX}/usr/libexec:${LD_LIBRARY_PATH}
+
+
+for T in 01 02
+do
+	echo "secilc: test_$T.bin"
+	$PREFIX/usr/bin/secilc -o test_$T.bin test_$T.cil
+
+	echo "checkpolicy: test_$T.bin.cil"
+	$PREFIX/usr/bin/checkpolicy -C -b -o test_$T.bin.cil test_$T.bin
+
+	echo "secil2conf: test_$T.conf"
+	$PREFIX/usr/bin/secil2conf -o test_$T.cil.conf test_$T.cil
+
+	mv *.bin tmp
+	mv *.bin.cil tmp
+	mv *.cil.conf tmp
+	mv file_contexts tmp
+done

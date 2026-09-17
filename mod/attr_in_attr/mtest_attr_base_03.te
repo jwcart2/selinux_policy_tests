@@ -1,0 +1,104 @@
+class CLASS1
+class cl1
+class cl2
+class cl3
+class cl4
+class cl5
+class cl6
+class cl7
+
+sid kernel
+
+class CLASS1 { PERM1 }
+class cl1 { p1 }
+class cl2 { p2 }
+class cl3 { p3 }
+class cl4 { p4 }
+class cl5 { p5 }
+class cl6 { p6 }
+class cl7 { p7 }
+
+sensitivity SENS1;
+dominance { SENS1 }
+level SENS1;
+mlsconstrain CLASS1 { PERM1 } ((h1 dom h2) and (l1 domby h1));
+
+attribute at1;
+attribute at2;
+
+type TYPE1;
+type t1a;
+type t2a;
+type td1;
+type td2;
+type tn1;
+type tn2;
+type tx1;
+type tx2;
+type tz1;
+type tz2;
+
+typeattribute t1a at1;
+typeattribute t2a at2;
+
+optional {
+  require {
+    attribute at3;
+  }
+  type t3a;
+  typeattribute t3a at3;
+  typeattribute at1 at3;
+}
+
+optional {
+  require {
+    attribute at4;
+  }
+  type t4a;
+  typeattribute t4a at4;
+}
+
+optional {
+  require {
+	attribute at5;
+  }
+  type t5a;
+  typeattribute t5a at5;
+  #typeattribute at1 at5;
+}
+
+optional {
+  require {
+	attribute at6;
+  }
+  type t6a;
+  typeattribute t6a at6;
+}
+
+allow TYPE1 self : CLASS1 PERM1;
+allow td1 at1 : cl1 p1;
+allow td2 at2 : cl2 p2;
+neverallow tz1 ~tz2 : cl7 p7;
+
+type_transition at1 tx1 : cl1 tn1;
+type_transition at2 tx2 : cl2 tn2;
+
+role ROLE1;
+role r1a;
+role r2a;
+role rn1;
+role rn2;
+
+role ROLE1 types TYPE1;
+role r1a types at1;
+role r2a types at2;
+
+role_transition r1a at1 : cl1 rn1;
+role_transition r2a at2 : cl2 rn2;
+
+user USER1 roles ROLE1 level SENS1 range SENS1;
+
+constrain cl1 { p1 } (t1 == at1);
+constrain cl2 { p2 } (t1 == at2);
+
+sid kernel USER1:ROLE1:TYPE1:SENS1

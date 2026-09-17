@@ -1,0 +1,49 @@
+#!/usr/bin/bash
+
+PREFIX=~/local
+
+export LD_LIBRARY_PATH=$PREFIX/lib:$PREFIX/usr/lib:$PREFIX/usr/lib64:$PREFIX/usr/libexec:${LD_LIBRARY_PATH}
+
+for T in 01
+do
+	echo "test_$T"
+	$PREFIX/usr/bin/secil2tree -o test_$T.cil.tree test_$T.cil
+	$PREFIX/usr/bin/secilc -o test_$T.cil.bin test_$T.cil
+	$PREFIX/usr/bin/checkpolicy -F -b -o test_$T.cil.bin.conf test_$T.cil.bin
+	$PREFIX/usr/bin/checkpolicy -C -b -o test_$T.cil.bin.cil test_$T.cil.bin
+
+	$PREFIX/usr/bin/secil2conf -o test_$T.cil.conf test_$T.cil
+	$PREFIX/usr/bin/checkpolicy -o test_$T.cil.conf.bin test_$T.cil.conf
+done
+
+for T in 02
+do
+	echo "test_$T"
+	$PREFIX/usr/bin/secil2tree -o test_$T.cil.tree test_$T.cil
+	$PREFIX/usr/bin/secilc -M 1 -o test_$T.cil.bin test_$T.cil
+	$PREFIX/usr/bin/checkpolicy -M -F -b -o test_$T.cil.bin.conf test_$T.cil.bin
+	$PREFIX/usr/bin/checkpolicy -M -C -b -o test_$T.cil.bin.cil test_$T.cil.bin
+
+	$PREFIX/usr/bin/secil2conf -o test_$T.cil.conf test_$T.cil
+	$PREFIX/usr/bin/checkpolicy -M -o test_$T.cil.conf.bin test_$T.cil.conf
+done
+
+for T in 03
+do
+	echo "test_$T"
+	$PREFIX/usr/bin/secil2tree -o test_$T.cil.tree test_$T.cil
+	$PREFIX/usr/bin/secilc -M 1 -c 30 -t xen -o test_$T.cil.bin test_$T.cil
+	$PREFIX/usr/bin/checkpolicy -M -F -b -o test_$T.cil.bin.conf test_$T.cil.bin
+	$PREFIX/usr/bin/checkpolicy -M -C -b -o test_$T.cil.bin.cil test_$T.cil.bin
+
+	$PREFIX/usr/bin/secil2conf -o test_$T.cil.conf test_$T.cil
+	$PREFIX/usr/bin/checkpolicy -M -t xen -c 30 -o test_$T.cil.conf.bin test_$T.cil.conf
+done
+
+
+mv *.tree tmp/
+mv *.bin tmp/
+mv *.bin.cil tmp/
+mv *.bin.conf tmp/
+mv *.conf tmp/
+mv file_contexts tmp/

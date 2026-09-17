@@ -1,0 +1,158 @@
+# Investigating type bounds and implicit role bounds are handled correctly
+
+class CLASS1
+
+sid kernel
+
+class CLASS1 { PERM1 }
+
+sensitivity SENS1;
+dominance { SENS1 }
+level SENS1;
+mlsconstrain CLASS1 { PERM1 } ((h1 dom h2) and (l1 domby h1));
+
+type TYPE1;
+type tg1a;
+type tg1b;
+type tg1c;
+
+allow TYPE1 self : CLASS1 PERM1;
+
+optional {
+  require {
+    type tg1a;
+  }
+  allow tg1a self : CLASS1 PERM1;
+  optional {
+    require {
+      type tg1b;
+    }
+    allow tg1b self : CLASS1 PERM1;
+    optional {
+      require {
+        type tg1c;
+      }
+      allow tg1c self : CLASS1 PERM1;
+    }
+  }
+}
+
+optional {
+  require {
+    type bad_t1x;
+  }
+  type t1b;
+  type t1bc;
+  typebounds t1b t1bc;
+  allow t1b self : CLASS1 PERM1;
+  allow t1bc self : CLASS1 PERM1;
+}
+
+type t1a;
+type t1ac;
+
+typebounds t1a t1ac;
+
+allow t1a self : CLASS1 PERM1;
+allow t1ac self : CLASS1 PERM1;
+
+optional {
+  require {
+    type TYPE1;
+  }
+  type t1c;
+  type t1cc;
+  typebounds t1c t1cc;
+  allow t1c self : CLASS1 PERM1;
+  allow t1cc self : CLASS1 PERM1;
+}
+
+role ROLE1;
+role r1a;
+role r1a.c;
+role r1d;   # Not same scope
+#role r1e.c; # Not same scope
+
+optional {
+  require {
+    role bad_r1x;
+  }
+  role r1b;
+  role r1b.c;
+  role r1b types TYPE1;
+  role r1b.c types TYPE1;
+}
+
+optional {
+  require {
+    role ROLE1;
+  }
+  role r1c;
+  role r1c.c;
+  role r1c types TYPE1;	
+  role r1c.c types TYPE1;
+}
+
+optional {
+  require {
+    role ROLE1;
+  }
+  role ROLE2;
+  #role r1d.c;
+  #role r1d.c types TYPE1;
+}
+
+optional {
+  require {
+    role ROLE1;
+  }
+  role r1e;
+  role r1e types TYPE1;
+}
+
+role ROLE1 types TYPE1;
+role r1a types TYPE1; # This should be needed, but apparently is not
+role r1a.c types TYPE1;
+role r1d types TYPE1;
+#role r1e.c types TYPE1;
+
+optional {
+  require {
+    user bad_u1x;
+  }
+  user us1b roles ROLE1 level SENS1 range SENS1;
+  user us1b.c roles ROLE1 level SENS1 range SENS1;
+}
+
+optional {
+  require {
+    #user USER1;
+	role ROLE1;
+  }
+  user us1c roles ROLE1 level SENS1 range SENS1;
+  user us1c.c roles ROLE1 level SENS1 range SENS1;
+}
+
+optional {
+  require {
+    #user USER1;
+	role ROLE1;
+  }
+  #user us1d.c roles ROLE1 level SENS1 range SENS1;
+}
+
+optional {
+  require {
+    #user USER1;
+	role ROLE1;
+  }
+  user us1e roles ROLE1 level SENS1 range SENS1;
+}
+
+user USER1 roles ROLE1 level SENS1 range SENS1;
+user us1a roles ROLE1 level SENS1 range SENS1;
+user us1a.c roles ROLE1 level SENS1 range SENS1;
+user us1d roles ROLE1 level SENS1 range SENS1;   # Not same scope
+#user us1e.c roles ROLE1 level SENS1 range SENS1; # Not same scope
+
+sid kernel USER1:ROLE1:TYPE1:SENS1

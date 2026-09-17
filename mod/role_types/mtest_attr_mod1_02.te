@@ -1,0 +1,33 @@
+module mtest_attr_mod1_02 1.0;
+
+require {
+	class cl2 { p2 };
+}
+
+type t2b;
+type td2;
+
+allow td2 t2b : cl2 p2;
+
+role r2b;
+role rn2;
+
+role r2b types t2b;
+
+role_transition r2b t2b : cl2 rn2;
+
+optional {
+  require {
+    role r1a;
+  }
+  type t1b;
+  role r1a types t1b;
+}
+
+optional {
+  require {
+    role r3c;
+  }
+  type t3b;
+  role r3c types t3b;
+}

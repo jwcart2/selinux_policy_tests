@@ -1,0 +1,107 @@
+;; Test allowing "." in global names
+
+(class CLASS (PERM))
+(classorder (CLASS))
+(sid SID)
+(sidorder (SID))
+(user USER)
+(role ROLE)
+(type TYPE)
+(category CAT)
+(categoryorder (CAT))
+(sensitivity SENS)
+(sensitivityorder (SENS))
+(sensitivitycategory SENS (CAT))
+(allow TYPE self (CLASS (PERM)))
+(roletype ROLE TYPE)
+(userrole USER ROLE)
+(userlevel USER (SENS))
+(userrange USER ((SENS)(SENS (CAT))))
+(sidcontext SID (USER ROLE TYPE ((SENS)(SENS))))
+
+;; Allowed
+(type t1.a)
+;(type .t1b)
+(allow t1.a self (CLASS (PERM)))
+;(allow .t1b self (CLASS (PERM)))
+
+;; Allowed
+(tunable tun2 true)
+(tunableif (tun2)
+  (true
+    (type t2.a)
+    ;(type .t2b)
+    (allow t2.a self (CLASS (PERM)))
+	;(allow .t2b self (CLASS (PERM)))
+  )
+)
+
+;; Not allowed
+;(block b3
+;  (type t3.a)
+;  (type .t3b)
+;  (allow t3.a self (CLASS (PERM)))
+;  (allow .t3b self (CLASS (PERM)))
+;)
+
+;; Not allowed
+;(block b4
+;  (tunable tun4 true)
+;  (tunableif (tun4)
+;    (true
+;      (type t4.a)
+;      (type .t4b)
+;      (allow t4.a self (CLASS (PERM)))
+;      (allow .t4b self (CLASS (PERM)))
+;    )
+;  )
+;)
+
+;; Not allowed
+;(macro m5 ()
+;  (type t5.a)
+;  (type .t5b)
+;  (allow t5.a self (CLASS (PERM)))
+;  (allow .t5b self (CLASS (PERM)))
+;)
+;(call m5)
+
+;; Not allowed
+;(optional o6
+;  (type t6.a)
+;  (type .t6b)
+;  (allow t6.a self (CLASS (PERM)))
+;  (allow .t6b self (CLASS (PERM)))
+;)
+
+;; Not allowed
+;(block b7
+;  (type t7)
+;  (allow t7 self (CLASS (PERM)))
+;)
+
+;(in b7
+;  (type t7.a)
+;  (type .t7b)
+;  (allow t7.a self (CLASS (PERM)))
+;  (allow .t7b self (CLASS (PERM)))
+;)
+
+;; Not allowed
+;(type t8)
+;(macro m8.a ()
+;  (allow t8 self (CLASS (PERM)))
+;)
+;(call m8.a)
+
+;; Not allowed
+;(type t9)
+;(block b9.a
+;  (allow t9 self (CLASS (PERM)))
+;)
+
+;; Not allowed
+;(type t10)
+;(optional o10.a
+;  (allow t10 self (CLASS (PERM)))
+;)

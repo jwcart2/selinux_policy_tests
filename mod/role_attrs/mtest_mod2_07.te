@@ -1,0 +1,148 @@
+module mtest_mod2_07 1.0;
+
+require {
+	class cl3 { p3 };
+	attribute_role ar1;
+	attribute_role ar1a;
+	attribute_role ar2;
+	attribute_role ar2b;
+	sensitivity SENS1;
+}
+
+type t1c;
+type t2c;
+type t3_;
+type t3c;
+type t4c;
+type t5c;
+type t6c;
+type t7c;
+type t8c;
+type td3;
+
+allow td3 t3c : cl3 p3;
+
+attribute_role ar1c;
+attribute_role ar2c;
+attribute_role ar3;
+attribute_role ar3a;
+attribute_role ar3b;
+attribute_role ar3c;
+attribute_role ar4c;
+attribute_role ar5c;
+attribute_role ar6c;
+attribute_role ar7c;
+attribute_role ar8c;
+
+role r1c;
+role r1ac;
+role r2c;
+role r2bc;
+role r3c;
+role r4c;
+role r5c;
+role r6c;
+role r7c;
+role r8c;
+role rn1c;
+role rn2c;
+role rn3;
+role rn3c;
+role rn4c;
+role rn5c;
+role rn6c;
+role rn7c;
+role rn8c;
+
+roleattribute r1c ar1c;
+roleattribute r1ac ar1a;
+roleattribute r2c ar2c;
+roleattribute r2bc ar2b;
+roleattribute r3c ar3c;
+roleattribute r4c ar4c;
+roleattribute r5c ar5c;
+roleattribute r6c ar6c;
+roleattribute r7c ar7c;
+roleattribute r8c ar8c;
+roleattribute ar1c ar1;
+roleattribute ar2c ar2;
+roleattribute ar3c ar3;
+
+role ar1c types t1c;
+role ar2c types t2c;
+role ar3 types t3_;
+role ar3c types t3c;
+role ar4c types t4c;
+role ar5c types t5c;
+role ar6c types t6c;
+role ar7c types t7c;
+role ar8c types t8c;
+
+role_transition ar1c t1c : cl3 rn1c;
+role_transition ar2c t2c : cl3 rn2c;
+role_transition ar3 t3_ : cl3 rn3;
+role_transition ar3c t3c : cl3 rn3c;
+role_transition ar4c t4c : cl3 rn4c;
+role_transition ar5c t5c : cl3 rn5c;
+role_transition ar6c t6c : cl3 rn6c;
+role_transition ar7c t7c : cl3 rn7c;
+role_transition ar8c t8c : cl3 rn8c;
+
+allow ar1c rn1c;
+allow ar2c rn2c;
+allow ar3 rn3;
+allow ar3c rn3c;
+allow ar4c rn4c;
+allow ar5c rn5c;
+allow ar6c rn6c;
+allow ar7c rn7c;
+allow ar8c rn8c;
+
+optional {
+  require {
+    attribute_role ar4b;
+  }
+  roleattribute ar4c ar4b;
+}
+
+optional {
+  require {
+    attribute_role ar5b;
+	role r5a;
+  }
+  roleattribute r5a ar5b;
+}
+
+optional {
+  require {
+    attribute_role ar6b;
+	role r6a;
+  }
+  roleattribute r6a ar6b;
+}
+
+optional {
+  require {
+    attribute_role ar7b;
+	role r7a;
+  }
+  roleattribute r7a ar7b;
+}
+
+optional {
+  require {
+    type t8XXX;
+    attribute_role ar8b;
+	role r8a;
+  }
+  roleattribute r8a ar8b;
+  role ar8b types t8XXX;
+}
+
+user us3 roles ar3 level SENS1 range SENS1;
+user us3c roles ar3c level SENS1 range SENS1;
+user us4c roles ar4c level SENS1 range SENS1;
+user us5c roles ar5c level SENS1 range SENS1;
+user us6c roles ar6c level SENS1 range SENS1;
+user us7c roles ar7c level SENS1 range SENS1;
+user us8c roles ar8c level SENS1 range SENS1;

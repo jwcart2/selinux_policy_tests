@@ -1,0 +1,48 @@
+# Testing semantic and normal MLS levels and ranges for users in non-mls policy
+
+class CLASS1
+
+sid kernel
+
+class CLASS1 { PERM1 }
+
+type TYPE1;
+type ts0;
+type ts1;
+type to0;
+type to1;
+
+allow TYPE1 self : CLASS1 PERM1;
+
+optional {
+  require {
+    class CLASS1 { PERM1 };
+	type ts1;
+	type to1;
+  }
+  user us1 roles rs1;
+}
+
+optional {
+  require {
+    class CLASS1 { PERM1 };
+  }
+  type ts2;
+  type to2;
+  role rs2;
+  role rs2 types ts2;
+  user us2 roles rs2;
+}
+
+role ROLE1;
+role rs0;
+role rs1;
+
+role ROLE1 types TYPE1;
+role rs0 types ts0;
+role rs1 types ts1;
+
+user USER1 roles ROLE1;
+user us0 roles rs0;
+
+sid kernel USER1:ROLE1:TYPE1

@@ -1,0 +1,105 @@
+class CLASS1
+class CLASS2
+class CLASS3
+sid SID1
+class CLASS1 { PERM1A PERM1Z }
+class CLASS2 { PERM2A }
+class CLASS3 { PERM3A }
+
+attribute TYPE_ATTR1BC;
+
+type TYPE1;
+type TYPE1A;
+type TYPE1B;
+type TYPE1C;
+type TYPE1BC;
+type TYPE1T;
+type TYPE1X;
+type TYPE1Z;
+type TYPE123A;
+
+typeattribute TYPE1B TYPE_ATTR1BC;
+typeattribute TYPE1C TYPE_ATTR1BC;
+
+allow TYPE1 self : CLASS1 PERM1A;
+
+attribute_role ROLE_ATTR1A;
+attribute_role ROLE_ATTR1B;
+attribute_role ROLE_ATTR1C;
+attribute_role ROLE_ATTR1BC;
+attribute_role ROLE_ATTR1Z;
+attribute_role ROLE_ATTR123A;
+
+role ROLE1;
+role ROLE1A;
+role ROLE1B;
+role ROLE1C;
+role ROLE1BC;
+role ROLE1T;
+role ROLE1X;
+role ROLE1Z;
+role ROLE123A;
+role ROLE2A;
+role ROLE3A;
+
+roleattribute ROLE1A ROLE_ATTR1A;
+roleattribute ROLE1B ROLE_ATTR1B;
+roleattribute ROLE1C ROLE_ATTR1C;
+roleattribute ROLE_ATTR1A ROLE_ATTR123A;
+roleattribute ROLE_ATTR1B ROLE_ATTR1BC;
+roleattribute ROLE_ATTR1C ROLE_ATTR1BC;
+
+role ROLE1 types TYPE1;
+
+role ROLE_ATTR1Z types TYPE1Z;
+role ROLE_ATTR1A types TYPE1A;
+role ROLE_ATTR1BC types TYPE_ATTR1BC;
+role ROLE_ATTR123A types TYPE123A;
+
+allow ROLE_ATTR1Z ROLE1Z;
+allow ROLE1Z ROLE_ATTR1Z;
+allow ROLE_ATTR1A ROLE1T;
+allow ROLE1T ROLE_ATTR1A;
+allow ROLE_ATTR1BC ROLE1BC;
+allow ROLE1BC ROLE_ATTR1BC;
+allow ROLE_ATTR123A ROLE123A;
+allow ROLE123A ROLE_ATTR123A;
+
+role_transition ROLE_ATTR1Z TYPE1Z:CLASS1 ROLE1Z;
+role_transition ROLE_ATTR1A TYPE1A:CLASS1 ROLE1T;
+role_transition ROLE_ATTR1BC TYPE1BC:CLASS1 ROLE1T;
+role_transition ROLE_ATTR123A TYPE123A:CLASS1 ROLE123A;
+
+optional {
+		 require {
+		 		 class CLASS1 PERM1A;
+				 role ROLE1T;
+				 }
+		 type TYPE1P;
+		 type TYPE123P;
+		 attribute_role ROLE_ATTR1P;
+		 attribute_role ROLE_ATTR123P;
+		 role ROLE1P;
+		 role ROLE123P;
+		 roleattribute ROLE1P ROLE_ATTR1P;
+		 roleattribute ROLE_ATTR1P ROLE_ATTR123P;
+		 role ROLE_ATTR1P types TYPE1P;
+		 role ROLE_ATTR123P types TYPE123P;
+		 allow ROLE_ATTR1P ROLE1T;
+		 allow ROLE1T ROLE_ATTR1P;
+		 allow ROLE_ATTR123P ROLE123P;
+		 allow ROLE123P ROLE_ATTR123P;
+		 role_transition ROLE_ATTR1P TYPE1P:CLASS1 ROLE1T;
+		 role_transition ROLE_ATTR123P TYPE123P:CLASS1 ROLE123P;
+		 user USER1P roles ROLE_ATTR123P;
+}
+
+user USER1 roles ROLE1;
+user USER1Z roles ROLE_ATTR1Z;
+user USER1A roles ROLE_ATTR1A;
+user USER1BC roles ROLE_ATTR1BC;
+
+#constrain CLASS1 { PERM1Z } ( r1 == ROLE_ATTR1Z );
+#constrain CLASS1 { PERM1A } ( r1 == ROLE_ATTR1A );
+
+sid SID1 USER1:ROLE1:TYPE1

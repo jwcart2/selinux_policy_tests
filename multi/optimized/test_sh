@@ -1,0 +1,46 @@
+#! /usr/bin/bash
+
+PREFIX=~/local
+
+export LD_LIBRARY_PATH=${PREFIX}/lib:${PREFIX}/usr/lib:${PREFIX}/usr/lib64:${PREFIX}/usr/libexec:${LD_LIBRARY_PATH}
+
+
+for T in 01
+do
+
+    echo "Test_$T"
+    $PREFIX/usr/bin/checkpolicy -M -o test_$T.conf.orig.bin test_$T.conf
+    $PREFIX/usr/bin/checkpolicy -F -M -b -o test_$T.conf.orig.bin.conf test_$T.conf.orig.bin
+
+    $PREFIX/usr/bin/checkpolicy -O -M -o test_$T.conf.opt.bin test_$T.conf
+    $PREFIX/usr/bin/checkpolicy -F -M -b -o test_$T.conf.opt.bin.conf test_$T.conf.opt.bin
+
+    DR=`sediff test_$T.conf.orig.bin test_$T.conf.opt.bin | wc -l`
+    if [ $DR != 0 ]
+    then
+	echo "Optimized and original are different"
+    else
+	echo "Optimized and original are the same"
+    fi
+
+    $PREFIX/usr/bin/checkpolicy -M -C -o test_$T.cil test_$T.conf
+
+    $PREFIX/usr/bin/secilc -N -M 1 -o test_$T.cil.orig.bin test_$T.cil
+    $PREFIX/usr/bin/checkpolicy -F -M -b -o test_$T.cil.orig.bin.conf test_$T.cil.orig.bin
+
+    $PREFIX/usr/bin/secilc -O -N -M 1 -o test_$T.cil.opt.bin test_$T.cil
+    $PREFIX/usr/bin/checkpolicy -F -M -b -o test_$T.cil.opt.bin.conf test_$T.cil.opt.bin
+
+    DR=`sediff test_$T.cil.orig.bin test_$T.cil.opt.bin | wc -l`
+    if [ $DR != 0 ]
+    then
+	echo "Optimized and original are different"
+    else
+	echo "Optimized and original are the same"
+    fi
+done
+
+mv *.bin.conf tmp/
+mv *.bin tmp/
+mv *.cil tmp/
+mv file_contexts tmp/

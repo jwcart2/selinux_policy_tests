@@ -1,0 +1,3 @@
+
+rm tmp/*.bin
+rm tmp/*.bin.conf

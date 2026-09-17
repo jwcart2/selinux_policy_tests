@@ -1,0 +1,17 @@
+module mtest_mod1_50 1.0;
+
+# Module must have a require block for the module
+# Removing the require block below will result in an error
+require {
+  type TYPE1;
+}
+
+TYPE TM1;
+
+optional {
+  require {
+    type TM1;
+  }
+  role RM1;
+  role RM1 types TM1;
+}

@@ -1,0 +1,71 @@
+;; All SELinux rules (but not all CIL rules)
+;;
+
+(class cl01 (p01a p01b))
+(class cl02 ())
+(class cl03 (p03a p03b))
+(class cl04 (p04a p04b))
+(class clx (ioctl))
+(classorder (cl01 cl02 cl03 cl04 clx))
+
+(common cm01 (p11a p11b))
+(common cm02 (p22a p22b))
+
+(classcommon cl01 cm01)
+(classcommon cl02 cm02)
+
+(sid kernel)
+(sidorder (kernel))
+
+(mls true)
+
+(sensitivity s01)
+(sensitivityorder (s01))
+
+(category c01)
+(category c02)
+(category c03)
+(categoryorder (c01 c02 c03))
+
+(sensitivitycategory s01 ((range c01 c03)))
+
+(mlsconstrain (cl01 (all)) (and (dom h1 h2) (domby l1 h1)))
+(mlsconstrain (cl02 (not p22a)) (and (dom h1 h2) (domby l1 h1)))
+(mlsvalidatetrans cl03 (or (eq l1 l2) (incomp l1 l2)))
+(mlsvalidatetrans cl03 (or (eq l1 l2) (eq t3 tp01)))
+
+(type tp01)
+
+(allow tp01 self (cl01 (p01a)))
+
+(role object_r)
+(role rl01)
+
+(roletype object_r tp01)
+(roletype rl01 tp01)
+
+(user us01)
+(userrole us01 object_r)
+(userrole us01 rl01)
+(userlevel us01 (s01))
+(userrange us01 ((s01) (s01 (range c01 c03))))
+
+(constrain (cl01 (all)) (not (and (eq t1 tp01) (neq u1 u2))))
+(constrain (cl02 (not (p22a p22b))) (not (and (eq t1 tp01) (neq u1 u2))))
+(validatetrans cl03 (or (eq u1 u2) (eq r1 r2)))
+(validatetrans cl03 (or (eq u1 u2) (eq t3 tp01)))
+
+(sidcontext kernel (us01 rl01 tp01 ((s01) (s01 (c01 c02 c03)))))
+
+(fsuse xattr fs01 (us01 rl01 tp01 ((s01) (s01))))
+(fsuse task fs02 (us01 rl01 tp01 ((s01) (s01))))
+(fsuse trans fs03 (us01 rl01 tp01 ((s01) (s01))))
+(genfscon fs04 / (us01 rl01 tp01 ((s01) (s01))))
+(portcon udp 1000 (us01 rl01 tp01 ((s01) (s01))))
+(portcon udp (1001 1009) (us01 rl01 tp01 ((s01) (s01))))
+(portcon tcp 2000 (us01 rl01 tp01 ((s01) (s01))))
+(portcon tcp (2001 2009) (us01 rl01 tp01 ((s01) (s01))))
+(portcon dccp 3000 (us01 rl01 tp01 ((s01) (s01))))
+(portcon dccp (3001 3009) (us01 rl01 tp01 ((s01) (s01))))
+(netifcon if01 (us01 rl01 tp01 ((s01) (s01))) (us01 rl01 tp01 ((s01) (s01))))
+

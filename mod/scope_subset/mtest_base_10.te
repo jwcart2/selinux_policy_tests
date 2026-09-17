@@ -1,0 +1,118 @@
+# Testing module_to_cil converting scopes to optional blocks
+# While harmless, module_to_cil will equate scopes with the same requires
+# as the block before it as an optional blocks within the previous optional
+# block.
+# This can be changed by making it check that the block is a proper subset
+
+class CLASS1
+class CLASS2
+class CLASS3
+
+sid kernel
+
+class CLASS1 { PERM1A PERM1B PERM1C }
+class CLASS2 { PERM2A PERM2B PERM2C }
+class CLASS3 { PERM3A PERM3B PERM3C }
+
+sensitivity SENS1;
+dominance { SENS1 }
+level SENS1;
+mlsconstrain CLASS1 { PERM1A } ((h1 dom h2) and (l1 domby h1));
+
+type TYPE1;
+type ts1;
+type to1;
+
+allow TYPE1 self : CLASS1 PERM1A;
+
+optional {
+  require {
+    type ts1;
+  }
+  allow ts1 to1 : CLASS1 PERM1A;
+  optional {
+    require {
+	  type ts2;
+    }
+    allow ts1 to1 : CLASS1 PERM1B;
+    allow ts2 to1 : CLASS1 PERM1B;
+    optional {
+      require {
+	    type ts3;
+      }
+      allow ts1 to1 : CLASS1 PERM1C;
+      allow ts2 to1 : CLASS1 PERM1C;
+      allow ts3 to1 : CLASS1 PERM1C;
+    }
+  }
+}
+
+optional {
+  require {
+    type TYPE1;
+  }
+  allow TYPE1 self : CLASS1 PERM1B;
+}
+
+optional {
+  require {
+    type ts2;
+  }
+  allow ts2 to1 : CLASS2 PERM2A;
+}
+
+optional {
+  require {
+    type ts2;
+  }
+  allow ts2 to1 : CLASS2 PERM2B;
+}
+
+optional {
+  require {
+    type ts2;
+  }
+  allow ts2 to1 : CLASS2 PERM2C;
+}
+
+optional {
+  require {
+    type TYPE1;
+  }
+  allow TYPE1 self : CLASS1 PERM1C;
+}
+
+optional {
+  require {
+    type ts1;
+    type ts2;
+    type ts3;
+  }
+  allow ts1 to1 : CLASS3 PERM3A;
+  allow ts2 to1 : CLASS3 PERM3A;
+  allow ts3 to1 : CLASS3 PERM3A;
+}
+
+optional {
+  require {
+    type ts2;
+    type ts3;
+  }
+  allow ts2 to1 : CLASS3 PERM3B;
+  allow ts3 to1 : CLASS3 PERM3B;
+}
+
+optional {
+  require {
+    type ts3;
+  }
+  allow ts3 to1 : CLASS3 PERM3C;
+}
+
+role ROLE1;
+
+role ROLE1 types TYPE1;
+
+user USER1 roles ROLE1 level SENS1 range SENS1;
+
+sid kernel USER1:ROLE1:TYPE1:SENS1

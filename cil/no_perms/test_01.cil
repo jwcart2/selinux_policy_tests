@@ -1,0 +1,27 @@
+(user u)
+(userrange u lowlow)
+(userlevel u low)
+(userrole u r)
+
+(role r)
+
+(roletype r t)
+
+(type t)
+
+(sensitivity s0)
+(sensitivityorder (s0))
+
+(level low (s0))
+(levelrange lowlow (low low))
+
+(context context (u r t lowlow))
+
+(sid kernel)
+(sidorder (kernel))
+(sidcontext kernel context)
+
+(class foo (bar baz))
+(classorder (foo))
+
+(allow t self (foo (not (bar baz))))

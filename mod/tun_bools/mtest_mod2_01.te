@@ -1,0 +1,36 @@
+module mtest_mod2_01 1.0;
+
+# If module requires not met then there will be a link error
+require {
+	# Below gives "Mismatch between boolean/tunable definition and usage..."
+	tunable bool1a, bool2a;
+	#bool bool1a, bool2a;
+    	tunable tun1a, tun2a;
+	class CLASS3 { PERM3 };
+}
+
+type TM2;
+type tm2a;
+type tm2b;
+type tm2c;
+type tm2d;
+type tm2e;
+type tm2f;
+
+allow TM2 self : CLASS3 PERM3;
+
+if (bool1a) {
+   allow tm2a self : CLASS3 PERM3;
+}
+
+if (bool1a && tun1a) {
+   allow tm2b self : CLASS3 PERM3;
+}
+
+if (bool2a) {
+   allow tm2c self : CLASS3 PERM3;
+}
+
+if (tun2a && bool2a) {
+   allow tm2e self : CLASS3 PERM3;
+}

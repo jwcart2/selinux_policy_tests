@@ -1,0 +1,13 @@
+#!/usr/bin/bash
+
+PREFIX=~/local
+
+export LD_LIBRARY_PATH=$PREFIX/lib:$PREFIX/usr/lib:$PREFIX/usr/lib64:$PREFIX/usr/libexec:${LD_LIBRARY_PATH}
+
+
+for T in 04 06
+do
+	echo "test_$T.bin"
+	$PREFIX/usr/bin/checkpolicy -M -o test_$T.bin conf/test_$T.conf
+	#$PREFIX/usr/bin/checkpolicy -F -b -M -o test_$T.bin.conf test_$T.bin
+done

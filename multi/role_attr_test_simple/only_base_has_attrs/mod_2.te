@@ -1,0 +1,84 @@
+module mod_2 0.0.1;
+
+require {
+	class CLASS1 PERM1A;
+	class CLASS2 PERM2A;
+	role ROLE2A, ROLE3A, ROLE123A;
+	type TYPE123A;
+}
+
+attribute TYPE_ATTR2BC;
+
+type TYPE2;
+type TYPE2A;
+type TYPE2B;
+type TYPE2C;
+type TYPE2BC;
+type TYPE2T;
+type TYPE2X;
+type TYPE23B;
+
+typeattribute TYPE2B TYPE_ATTR2BC;
+typeattribute TYPE2C TYPE_ATTR2BC;
+
+allow TYPE2 self : CLASS2 PERM2A;
+
+role ROLE2;
+role ROLE2B;
+role ROLE2C;
+role ROLE2BC;
+role ROLE2T;
+role ROLE2X;
+role ROLE23B;
+role ROLE3P;
+
+role ROLE2 types TYPE2;
+role ROLE2A types TYPE2A;
+role ROLE2B types TYPE_ATTR2BC;
+role ROLE2C types TYPE_ATTR2BC;
+role ROLE2B types TYPE23B;
+role ROLE2A types TYPE123A;
+
+allow ROLE2A ROLE2T;
+allow ROLE2T ROLE2A;
+allow ROLE2B ROLE2BC;
+allow ROLE2BC ROLE2B;
+allow ROLE2C ROLE2BC;
+allow ROLE2BC ROLE2C;
+allow ROLE2B ROLE23B;
+allow ROLE23B ROLE2B;
+allow ROLE2A ROLE123A;
+allow ROLE123A ROLE2A;
+
+role_transition ROLE2A TYPE2A:CLASS2 ROLE2T;
+role_transition ROLE2B TYPE2BC:CLASS2 ROLE2T;
+role_transition ROLE2C TYPE2BC:CLASS2 ROLE2T;
+role_transition ROLE2B TYPE23B:CLASS2 ROLE23B;
+role_transition ROLE2A TYPE123A:CLASS1 ROLE123A;
+
+optional {
+		 require {
+		 		 class CLASS1 PERM1A;
+		 		 class CLASS2 PERM2A;
+				 role ROLE2T, ROLE3P, ROLE123P;
+				 type TYPE23P, TYPE123P;
+				 }
+		 type TYPE2P;
+		 type TYPE23P;
+		 role ROLE2P;
+		 role ROLE23P;
+		 role ROLE2P types TYPE2P;
+		 role ROLE2P types TYPE23P;
+		 allow ROLE2P ROLE2T;
+		 allow ROLE2T ROLE2P;
+		 allow ROLE2P ROLE23P;
+		 allow ROLE23P ROLE2P;
+		 allow ROLE2P ROLE123P;
+		 allow ROLE123P ROLE2P;
+		 role_transition ROLE2P TYPE2P:CLASS2 ROLE2T;
+		 role_transition ROLE2P TYPE23P:CLASS2 ROLE23P;
+		 role_transition ROLE2P TYPE123P:CLASS1 ROLE123P;
+		 user USER2P roles { ROLE2P ROLE3P };
+}
+
+user USER2BC roles { ROLE2B ROLE2C };

@@ -1,0 +1,63 @@
+
+class CLASS1
+class CLASS2
+class CLASS3
+
+sid kernel
+
+class CLASS1 { PERM1 }
+class CLASS2 { PERM2 }
+class CLASS3 { PERM3 }
+
+sensitivity SENS1;
+dominance { SENS1 }
+level SENS1;
+mlsconstrain CLASS1 { PERM1 } ((h1 dom h2) and (l1 domby h1));
+
+bool bool1a false;
+bool bool1b false;
+tunable tun1a true;
+tunable tun1b true;
+
+type TYPE1;
+type tba;
+type tbb;
+type tbc;
+type tbd;
+
+allow TYPE1 self : CLASS1 PERM1;
+
+optional {
+  require {
+    bool bool1a;
+  }
+  if (bool1a) {
+     allow tba self : CLASS1 PERM1;
+  }
+}
+
+if (bool1b) {
+   allow tbb self : CLASS1 PERM1;
+}
+
+optional {
+  require {
+    tunable tun1a;
+  }
+  if (tun1a) {
+     allow tbc self : CLASS1 PERM1;
+  }
+}
+
+if (tun1b) {
+   allow tbd self : CLASS1 PERM1;
+}
+
+
+role ROLE1;
+
+role ROLE1 types TYPE1;
+
+user USER1 roles ROLE1 level SENS1 range SENS1;
+
+sid kernel USER1:ROLE1:TYPE1:SENS1

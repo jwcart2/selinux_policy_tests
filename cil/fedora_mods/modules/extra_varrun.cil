@@ -1,0 +1,6 @@
+(optional extra_var_run_1
+  (filecon "/run/pasta.pid" any (system_u object_r pasta_pid_t ((s0) (s0))))
+)
+(optional extra_var_run_2
+  (filecon "/run/smartd.pid" file (system_u object_r fsdaemon_var_run_t ((s0) (s0))))
+)

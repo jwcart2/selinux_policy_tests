@@ -1,0 +1,54 @@
+class CLASS1
+class cl1
+class cl2
+class cl3
+
+sid kernel
+
+class CLASS1 { PERM1 }
+class cl1 { p1 }
+class cl2 { p2 }
+class cl3 { p3 }
+
+sensitivity SENS1;
+dominance { SENS1 }
+level SENS1;
+mlsconstrain CLASS1 { PERM1 } ((h1 dom h2) and (l1 domby h1));
+
+type TYPE1;
+type t1a;
+type td1;
+
+allow TYPE1 self : CLASS1 PERM1;
+allow td1 t1a : cl1 p1;
+
+role ROLE1;
+role r1a;
+role rn1;
+
+role ROLE1 types TYPE1;
+role r1a types t1a;
+
+role_transition r1a t1a : cl1 rn1;
+
+optional {
+  require {
+    role r2b;
+  }
+  type t2a;
+  role r2b types t2a;
+}
+
+optional {
+  require {
+    role r3c;
+  }
+  type t3a;
+  role r3c types t3a;
+}
+
+user USER1 roles ROLE1 level SENS1 range SENS1;
+
+constrain cl1 { p1 } (t1 == t1a);
+
+sid kernel USER1:ROLE1:TYPE1:SENS1
