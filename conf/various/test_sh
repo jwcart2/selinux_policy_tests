@@ -1,0 +1,42 @@
+#!/usr/bin/bash
+
+#VER=30
+PREFIX=~/local
+
+export LD_LIBRARY_PATH=${PREFIX}/lib:${PREFIX}/usr/lib:${PREFIX}/usr/lib64:${PREFIX}/usr/libexec:${LD_LIBRARY_PATH}
+
+
+for T in 01 05 10 11 12 13 14 15 16 17 18
+do
+	echo "test_$T"
+	$PREFIX/usr/bin/checkpolicy -o test_$T.bin test_$T.conf
+	$PREFIX/usr/bin/checkpolicy -F -b -o test_$T.bin.conf test_$T.bin
+done
+
+for T in 02 04 06 07
+do
+	echo "test_$T"
+	$PREFIX/usr/bin/checkpolicy -M -o test_$T.bin test_$T.conf
+	$PREFIX/usr/bin/checkpolicy -F -b -M -o test_$T.bin.conf test_$T.bin
+done
+
+echo "test_03"
+$PREFIX/usr/bin/checkpolicy -M -t xen -o test_03.bin test_03.conf
+$PREFIX/usr/bin/checkpolicy -F -b -M -t xen -o test_03.bin.conf test_03.bin
+
+
+mv *.bin tmp/
+mv *.bin.conf tmp/
+
+for T in 01 02 03 04 05 06 07 10 11 12 13 14 15 16 17 18
+do
+    DR=`diff tmp/test_$T.bin orig/test_$T.bin | wc -l`
+    if [ $DR != 0 ]
+    then
+	echo "tmp/test_$T.bin and orig/test_$T.bin are different"
+	diff orig/test_$T.bin tmp/test_$T.bin > test_$T.diff
+	sediff orig/test_$T.bin tmp/test_$T.bin > test_$T.sediff
+	mv *.sediff tmp/
+    fi
+done
+
